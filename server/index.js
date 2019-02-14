@@ -36,8 +36,10 @@ const questions = [
   }
 ]
 
-app.get('/api/questions', (req, res) => {
-	res.send(questions)
+const db = require('./database/questions');
+app.post('/api/questions', (req, res) => {
+	db.fetchCollection(req.body.collName = 'questions')
+	//res.send(questions)
 });
 
 app.post('/api/answers', (req, res) => {
