@@ -33,10 +33,10 @@ export default {
     setAnswer: function(id) {
       this.questions[this.questionNR].answers[id].value = !this.questions[this.questionNR].answers[id].value
     },
-    sendAnswers: async function(choosenAnswers) {
-      const allAnswers = choosenAnswers.map(answer => answer.value)
+    sendAnswers: async function(allAnswers) {
+      const choosenAnswers = allAnswers.map(answer => answer.value)
+      console.log(choosenAnswers)
       await this.$axios.$post('http://localhost:3000/api/answers', allAnswers)
-      console.log(this.questionNR, this.questions.length)
       if (this.questionNR + 1 === this.questions.length) {
         this.$router.push({
           path: '/'

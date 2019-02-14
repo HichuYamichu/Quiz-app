@@ -10,26 +10,29 @@ const questions = [
   {
     text: 'Question 1',
     answers: [
-      { text: 'Answer A', value: false },
-      { text: 'Answer B', value: false },
-      { text: 'Answer C', value: false }
-    ]
+      { text: 'Answer A', value: false, id: 1 },
+      { text: 'Answer B', value: false, id: 2 },
+      { text: 'Answer C', value: false, id: 3 }
+    ],
+    correct: 2
   },
   {
     text: 'Question 2',
     answers: [
-      { text: 'Answer A', value: false },
-      { text: 'Answer B', value: false },
-      { text: 'Answer C', value: false }
-    ]
+      { text: 'Answer A', value: false, id: 1 },
+      { text: 'Answer B', value: false, id: 2 },
+      { text: 'Answer C', value: false, id: 3 }
+    ],
+    correct: 2
   },
   {
     text: 'Question 3',
     answers: [
-      { text: 'Answer A', value: false },
-      { text: 'Answer B', value: false },
-      { text: 'Answer C', value: false }
-    ]
+      { text: 'Answer A', value: false, id: 1 },
+      { text: 'Answer B', value: false, id: 2 },
+      { text: 'Answer C', value: false, id: 3 }
+    ],
+    correct: 2
   }
 ]
 
@@ -39,6 +42,7 @@ app.get('/api/questions', (req, res) => {
 
 app.post('/api/answers', (req, res) => {
   console.log(req.body)
+
   res.sendStatus(200)
 });
 
