@@ -2,15 +2,15 @@
   <v-card>
     <v-layout column>
       <v-flex align-self-center pa-1>
-        <h1 class="headline">{{question.text}}</h1>
+        <h1 class="headline">{{questions[questionNR].text}}</h1>
       </v-flex>
-      <v-flex v-for="(answer, index) in question.answers" :key="index" pa-2 >
+      <v-flex v-for="(answer, index) in questions[questionNR].answers" :key="index" pa-2 >
         <v-btn block @click="setAnswer(index)" :light="answer.value" large>
           {{answer.text}}
         </v-btn>
       </v-flex>
       <v-flex align-self-center>
-        <v-btn @click="sendAnswers(question.answers)" color="cyan">
+        <v-btn @click="sendAnswers(questions[questionNR].answers)" color="cyan">
           send answers
         </v-btn>
       </v-flex>
@@ -19,21 +19,32 @@
 </template>
 
 <script>
-import axios from 'axios'
-
 export default {
-  async asyncData({ $axios }, questionNR = 1 ) {
-    let Question = await $axios.$post('http://localhost:3000/api/questions', { questionNR })
-    return { question: Question }
+  data() {
+    return {
+      questionNR: 0
+    }
+  },
+  async asyncData({ $axios }) {
+    let Questions = await $axios.$get('http://localhost:3000/api/questions')
+    return { questions: Questions }
   },
   methods: {
     setAnswer: function(id) {
-      this.question.answers[id].value = !this.question.answers[id].value
+      this.questions[this.questionNR].answers[id].value = !this.questions[this.questionNR].answers[id].value
     },
     sendAnswers: async function(choosenAnswers) {
       const allAnswers = choosenAnswers.map(answer => answer.value)
       await this.$axios.$post('http://localhost:3000/api/answers', allAnswers)
-      
+      console.log(this.questionNR, this.questions.length)
+      if (this.questionNR + 1 === this.questions.length) {
+        this.$router.push({
+          path: '/'
+        })
+      } else {
+        this.questionNR++
+        // this.$forceUpdate
+      } 
     }
   }
 }

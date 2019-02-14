@@ -22,20 +22,24 @@ const questions = [
       { text: 'Answer B', value: false },
       { text: 'Answer C', value: false }
     ]
+  },
+  {
+    text: 'Question 3',
+    answers: [
+      { text: 'Answer A', value: false },
+      { text: 'Answer B', value: false },
+      { text: 'Answer C', value: false }
+    ]
   }
 ]
 
 app.get('/api/questions', (req, res) => {
-	res.send([{name: 'lolol', number: 0, id: 0}, {name: 'lolol', number: 1, id: 1}, {name: 'lolol', number:2, id: 2}])
-});
-
-app.post('/api/questions', (req, res) => {
-  console.log(req.body)
-	res.send(questions[req.body.questionNR])
+	res.send(questions)
 });
 
 app.post('/api/answers', (req, res) => {
   console.log(req.body)
+  res.sendStatus(200)
 });
 
 // Import and Set Nuxt.js options
