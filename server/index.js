@@ -8,8 +8,16 @@ app.use(bodyParser.json());
 
 const db = require('./database/questions');
 app.post('/api/questions', async (req, res) => {
-  qestionsToSend = await db.fetchCollection(req.body.collName = 'questions')
-	res.send(qestionsToSend)
+  questionsFromDB = await db.fetchCollection(req.body.collName = 'questions')
+  
+  const safeRespnce = []
+  questionsFromDB.forEach(question => {
+    safeRespnce.push({
+      text: question.text,
+      answers: question.answers.map(answer => answer.text)
+    })
+  });
+	res.send(safeRespnce)
 });
 
 app.post('/api/answers', (req, res) => {
@@ -17,6 +25,15 @@ app.post('/api/answers', (req, res) => {
 
   res.sendStatus(200)
 });
+
+const dbtest = require('./database/index')
+app.post('/api/new-collection', async (req, res) => {
+  const dbInstance = await dbtest();  
+  await dbInstance.createCollection(req.body.name)
+	const coll = await dbInstance.collection(req.body.name).insertMany(req.body.questions);
+  console.log(req.body)
+  res.sendStatus(200)
+})
 
 // Import and Set Nuxt.js options
 let config = require('../nuxt.config.js')

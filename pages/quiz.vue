@@ -6,7 +6,7 @@
       </v-flex>
       <v-flex v-for="(answer, index) in questions[questionNR].answers" :key="index" pa-2 >
         <v-btn block @click="setAnswer(index)" :light="answer.value" large>
-          {{answer.text}}
+          {{ answer }}
         </v-btn>
       </v-flex>
       <v-flex align-self-center>
@@ -22,30 +22,33 @@
 export default {
   data() {
     return {
-      questionNR: 0
+      questionNR: 0,
+      userAnswers: [],
+      currentQuestionAnswer: []
     }
   },
   async asyncData({ $axios }) {
     const Questions = await $axios.$post('http://localhost:3000/api/questions', {questions: 'questions'})
-    console.log(Questions)
-    return { questions: Questions }
+    return {
+      questions: Questions  
+    }
   },
   methods: {
     setAnswer: function(id) {
-      this.questions[this.questionNR].answers[id].value = !this.questions[this.questionNR].answers[id].value
+      currentQuestionAnswer.push([])
     },
-    sendAnswers: async function(allAnswers) {
-      const choosenAnswers = allAnswers.map(answer => answer.value)
-      console.log(choosenAnswers)
-      await this.$axios.$post('http://localhost:3000/api/answers', allAnswers)
-      if (this.questionNR + 1 === this.questions.length) {
-        this.$router.push({
-          path: '/'
-        })
-      } else {
-        this.questionNR++
-        // this.$forceUpdate
-      } 
+    sendAnswers: async function() {
+
+      console.log(userAnswers)
+      // await this.$axios.$post('http://localhost:3000/api/answers', allAnswers)
+      // if (this.questionNR + 1 === this.questions.length) {
+      //   this.$router.push({
+      //     path: '/'
+      //   })
+      // } else {
+      //   this.questionNR++
+      //   // this.$forceUpdate
+      // } 
     }
   }
 }
