@@ -1,4 +1,4 @@
-const dbInstance = require('./index.js');
+const db = require('./index.js');
 
 module.exports = {
   async addQuestion() {
@@ -6,8 +6,10 @@ module.exports = {
   },
 
   async fetchCollection(name) {
-		const coll = dbInstance.collection(name);
-		const questions = coll.find().toArray();
+    const dbInstance = await db();
+    
+		const coll = await dbInstance.collection(name);
+    const questions = await coll.find().toArray();
 		return questions
   }
 

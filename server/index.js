@@ -6,40 +6,10 @@ const app = express()
 
 app.use(bodyParser.json());
 
-const questions = [
-  {
-    text: 'Question 1',
-    answers: [
-      { text: 'Answer A', value: false, id: 1 },
-      { text: 'Answer B', value: false, id: 2 },
-      { text: 'Answer C', value: false, id: 3 }
-    ],
-    correct: 2
-  },
-  {
-    text: 'Question 2',
-    answers: [
-      { text: 'Answer A', value: false, id: 1 },
-      { text: 'Answer B', value: false, id: 2 },
-      { text: 'Answer C', value: false, id: 3 }
-    ],
-    correct: 2
-  },
-  {
-    text: 'Question 3',
-    answers: [
-      { text: 'Answer A', value: false, id: 1 },
-      { text: 'Answer B', value: false, id: 2 },
-      { text: 'Answer C', value: false, id: 3 }
-    ],
-    correct: 2
-  }
-]
-
 const db = require('./database/questions');
-app.post('/api/questions', (req, res) => {
-	db.fetchCollection(req.body.collName = 'questions')
-	//res.send(questions)
+app.post('/api/questions', async (req, res) => {
+  qestionsToSend = await db.fetchCollection(req.body.collName = 'questions')
+	res.send(qestionsToSend)
 });
 
 app.post('/api/answers', (req, res) => {

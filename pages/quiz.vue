@@ -27,6 +27,7 @@ export default {
   },
   async asyncData({ $axios }) {
     const Questions = await $axios.$post('http://localhost:3000/api/questions', {questions: 'questions'})
+    console.log(Questions)
     return { questions: Questions }
   },
   methods: {
