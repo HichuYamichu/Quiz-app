@@ -2,13 +2,14 @@ const express = require('express')
 const consola = require('consola')
 const { Nuxt, Builder } = require('nuxt')
 const bodyParser = require('body-parser');
+const db = require('./database/index');
+const collections = require('./database/questions');
 const app = express()
 
 app.use(bodyParser.json());
 
-const db = require('./database/questions');
 app.post('/api/questions', async (req, res) => {
-  questionsFromDB = await db.fetchCollection(req.body.collName = 'questions')
+  questionsFromDB = await collections.fetchCollection(req.body.collName = 'questions')
   
   const safeRespnce = []
   questionsFromDB.forEach(question => {
@@ -26,12 +27,31 @@ app.post('/api/answers', (req, res) => {
   res.sendStatus(200)
 });
 
-const dbtest = require('./database/index')
+
 app.post('/api/new-collection', async (req, res) => {
-  const dbInstance = await dbtest();  
+  const dbInstance = await db();  
   await dbInstance.createCollection(req.body.name)
-	const coll = await dbInstance.collection(req.body.name).insertMany(req.body.questions);
+	await dbInstance.collection(req.body.name).insertMany(req.body.questions);
   console.log(req.body)
+  res.sendStatus(200)
+})
+
+app.post('/api/fetch-collection', async (req, res) => {
+	try {
+		questionsFromDB = await collections.fetchCollection(req.body.name)
+		res.send(questionsFromDB)
+	} catch (err) {
+		res.sendStatus(500)
+	}
+})
+
+app.post('/api/update-collection', async (req, res) => {
+  await collections.editCollections(req.body.name, req.body.questions)
+  res.sendStatus(200)
+})
+
+app.post('/api/delete-collection', async (req, res) => {
+  await collections.deleteCollection(req.body.name)
   res.sendStatus(200)
 })
 
