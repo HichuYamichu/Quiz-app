@@ -9,7 +9,7 @@ const app = express()
 app.use(bodyParser.json());
 
 app.post('/api/questions', async (req, res) => {
-  questionsFromDB = await collections.fetchCollection(req.body.collName = 'questions')
+  questionsFromDB = await collections.fetchCollection(req.body.collName)
   
   const safeRespnce = []
   questionsFromDB.forEach(question => {
