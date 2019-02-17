@@ -20,25 +20,16 @@
 
 <script>
 export default {
-	props: ['collectionName'],
   data() {
     return {
       questionNR: 0,
     }
   },
   async asyncData({ $axios, store }) {
-    const safeQuestions = await $axios.$post('http://localhost:3000/api/questions', {collName: store.state.collectionName})
-		let safeAnswers = []
-		safeQuestions.forEach(question => {
-			question.answers.forEach(answer => {
-				safeAnswers.push({text: answer, value: false})
-			})
-			question.answers = safeAnswers
-			safeAnswers = []
-		})
-		console.log(safeQuestions)
+    const Questions = await $axios.$post('http://localhost:3000/api/questions', {collName: store.state.collectionName})
+		console.log(Questions)
     return {
-      questions: safeQuestions  
+      questions: Questions  
     }
   },
   methods: {

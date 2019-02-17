@@ -5,20 +5,25 @@ const bodyParser = require('body-parser');
 const db = require('./database/index');
 const collections = require('./database/questions');
 const app = express()
+const helpers = require('./helpers')
+
+
+const arr1 = [{ text: 'blablah', value: false }, { text: 'blablah', value: true }, { text: 'blablah', value: false }]
+const arr2 = [{ text: 'blablah', value: false }, { text: 'blablah', value: false }, { text: 'blablah', value: false }]
+
+console.log(helpers.compare(arr1, arr2))
 
 app.use(bodyParser.json());
 
 app.post('/api/questions', async (req, res) => {
-  questionsFromDB = await collections.fetchCollection(req.body.collName)
-  
-  const safeRespnce = []
-  questionsFromDB.forEach(question => {
-    safeRespnce.push({
-      text: question.text,
-      answers: question.answers.map(answer => answer.text)
-    })
-  });
-	res.send(safeRespnce)
+  questions = await collections.fetchCollection(req.body.collName)
+	questions.forEach(question => {
+		delete question._id
+		question.answers.forEach(answer => {
+			answer.value = false
+		})
+	});
+	res.send(questions)
 });
 
 app.post('/api/answers', (req, res) => {
