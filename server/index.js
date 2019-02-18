@@ -3,27 +3,53 @@ const consola = require('consola')
 const { Nuxt, Builder } = require('nuxt')
 const bodyParser = require('body-parser');
 const db = require('./database/index');
-const collections = require('./database/questions');
+const collections = require('./database/collections');
 const app = express()
+const session = require('express-session');
+const MongoStore = require('connect-mongo')(session);
 const helpers = require('./helpers')
 
+const store = new MongoStore({ dbPromise: db() });
 
-const arr1 = [{ text: 'blablah', value: false }, { text: 'blablah', value: true }, { text: 'blablah', value: false }]
-const arr2 = [{ text: 'blablah', value: false }, { text: 'blablah', value: false }, { text: 'blablah', value: false }]
-
-console.log(helpers.compare(arr1, arr2))
+app.use(session({
+  store: store,
+  secret: process.env.SECRET || 'HIdi65saUB.fds8DAL.;fPOq,(3',
+  resave: false,
+  rolling: true,
+  saveUninitialized: false,
+  cookie: {
+    maxAge: 1000 * 60 * 2
+  }
+}));
 
 app.use(bodyParser.json());
 
-app.post('/api/questions', async (req, res) => {
-  questions = await collections.fetchCollection(req.body.collName)
-	questions.forEach(question => {
-		delete question._id
-		question.answers.forEach(answer => {
-			answer.value = false
-		})
-	});
-	res.send(questions)
+app.post('/api/login', async (req, res) => {
+  if (req.body.password === process.env.PASSWORD || 'Qwerty123') {
+    req.session.admin = true
+    res.send({ admin: true })
+  } else {
+    res.send(401)
+  }
+})
+
+app.get('/api/questions', async (req, res) => {
+  if (req.query.name) {
+    try {
+      questions = await collections.fetchCollection(req.query.name)
+      questions.forEach(question => {
+        delete question._id
+        question.answers.forEach(answer => {
+          answer.value = false
+        })
+      });
+      res.send(questions)
+    } catch (err) {
+      res.sendStatus(404)
+    }
+  } else {
+    res.sendStatus(404)
+  }
 });
 
 app.post('/api/answers', (req, res) => {
@@ -34,30 +60,54 @@ app.post('/api/answers', (req, res) => {
 
 
 app.post('/api/new-collection', async (req, res) => {
-  const dbInstance = await db();  
-  await dbInstance.createCollection(req.body.name)
-	await dbInstance.collection(req.body.name).insertMany(req.body.questions);
-  console.log(req.body)
-  res.sendStatus(200)
+  if (req.session.admin) {
+    await collections.createCollection(req.body.name, req.body.questions)
+    res.sendStatus(200)
+  } else {
+    res.sendStatus(401)
+  }
 })
 
-app.post('/api/fetch-collection', async (req, res) => {
-	try {
-		questionsFromDB = await collections.fetchCollection(req.body.name)
-		res.send(questionsFromDB)
-	} catch (err) {
-		res.sendStatus(500)
-	}
+app.get('/api/fetch-collection', async (req, res) => {
+  try {
+    questions = await collections.fetchCollection(req.query.name)
+    res.send(questions)
+  } catch (err) {
+    res.sendStatus(404)
+  }
 })
 
 app.post('/api/update-collection', async (req, res) => {
-  await collections.editCollections(req.body.name, req.body.questions)
-  res.sendStatus(200)
+  if (req.session.admin) {
+    await collections.editCollections(req.body.name, req.body.questions)
+    res.sendStatus(200)
+  } else {
+    res / sendStatus(401)
+  }
 })
 
-app.post('/api/delete-collection', async (req, res) => {
-  await collections.deleteCollection(req.body.name)
-  res.sendStatus(200)
+app.delete('/api/delete-collection', async (req, res) => {
+  if (req.session.admin) {
+    await collections.deleteCollection(req.body.name)
+    res.sendStatus(200)
+  } else {
+    res.sendStatus(401)
+  }
+})
+
+app.post('/api/generate-token', async (req, res) => {
+  const token = await collections.generate(req.body.quizName, req.body.userName)
+  res.send({ token: token })
+})
+
+app.post('/api/authenticate', async (req, res) => {
+  const user = await collections.authenticateUser(req.body.token)
+  if (user) {
+    req.session.user = { userName: user.username, token: user.token, quiz: user.quiz }
+    res.send(user.quiz)
+  } else {
+    res.sendStatus(404)
+  }
 })
 
 // Import and Set Nuxt.js options

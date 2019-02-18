@@ -14,10 +14,13 @@
     "@nuxtjs/axios": "^5.3.6",
     "@nuxtjs/pwa": "^2.6.0",
     "body-parser": "^1.18.3",
+    "connect-mongo": "^2.0.3",
     "cross-env": "^5.2.0",
     "express": "^4.16.4",
+    "express-session": "^1.15.6",
     "mongodb": "^3.1.13",
     "nuxt": "^2.4.0",
+    "shortid": "^2.2.14",
     "vuetify": "^1.5.0",
     "vuetify-loader": "^1.2.0"
   },
