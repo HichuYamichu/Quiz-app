@@ -16,6 +16,7 @@
 
 <script>
 export default {
+  middleware: 'checkName',
   data() {
     return {
       questionNR: 0

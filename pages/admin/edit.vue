@@ -3,14 +3,15 @@
     <admin-panel/>
     <v-container grid-list-xl text-xs-center>
       <v-layout column warp>
-        <v-flex align-self-center xs12>
-          <h1 class="headline">Find collection to edit</h1>
-        </v-flex>
-        <v-flex align-self-center xs6>
-          <v-text-field label="collection name" v-model="collectionName" outline></v-text-field>
-        </v-flex>
         <v-flex xs6>
-          <v-btn large @click="find">Find</v-btn>
+          <v-menu offset-y>
+            <v-btn slot="activator" dark block large>Choose colllection to edit</v-btn>
+            <v-list>
+              <v-list-tile v-for="(name, index) in names" :key="index" @click="setName(index)">
+                <v-list-tile-title>{{ name }}</v-list-tile-title>
+              </v-list-tile>
+            </v-list>
+          </v-menu>
         </v-flex>
       </v-layout>
       <v-layout column wrap>
@@ -72,6 +73,22 @@ export default {
       questions: []
     };
   },
+  async asyncData({ $axios, store }) {
+    if (!store.state.cachedNames) {
+      const res = await $axios.$get(
+        "http://localhost:3000/api/fetch-collection-names"
+      );
+      console.log(res)
+      store.commit("SET_CACHE", res);
+      return {
+        names: res
+      };
+    } else {
+      return {
+        names: store.state.cachedNames
+      };
+    }
+  },
   methods: {
     addQuestion: function() {
       this.questions.push({ text: "", answers: [{ text: "", value: false }] });
@@ -79,8 +96,8 @@ export default {
     addAnswer: function(index) {
       this.questions[index].answers.push({ text: "", value: false });
     },
-    update: function() {
-      this.$axios.$post("http://localhost:3000/api/update-collection", {
+    update: async function() {
+      await this.$axios.$post("http://localhost:3000/api/update-collection", {
         name: this.collectionName,
         questions: this.questions
       });
@@ -89,9 +106,14 @@ export default {
       const res = await this.$axios.$get(
         `http://localhost:3000/api/fetch-collection?name=${this.collectionName}`
       );
+      this.questions = [];
       res.forEach(question => {
         this.questions.push(question);
       });
+    },
+    setName: function(index) {
+      this.collectionName = this.names[index];
+      this.find();
     }
   }
 };

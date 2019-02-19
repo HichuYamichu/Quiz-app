@@ -1,6 +1,6 @@
 <template>
   <div class="main">
-    <v-text-field label="TOKEN" :type="type" v-model="collectionName" outline></v-text-field>
+    <v-text-field :label="label" :type="type" v-model="token" outline></v-text-field>
     <v-btn @click="go">GO</v-btn>
   </div>
 </template>
@@ -9,26 +9,27 @@
 export default {
   data() {
     return {
-      collectionName: "",
-      type: "text"
+      token: "",
+      type: "text",
+      label: 'TOKEN'
     };
   },
   methods: {
     go: async function() {
-      // this.$store.commit('handeRequest', this.collectionName)
-      // this.$router.push('/quiz')
-      await this.$store.dispatch("handeRequest", this.collectionName);
+      await this.$store.dispatch("handeRequest", this.token);
       if (this.$store.state.admin) {
         this.$router.push("/admin/new");
       }
     }
   },
   watch: {
-    collectionName: function() {
-      if (this.collectionName.charAt(0) == "\\") {
+    token: function() {
+      if (this.token.charAt(0) == "\\") {
         this.type = "password";
+        this.label = 'Password'
       } else {
         this.type = "text";
+        this.label = 'TOKEN'
       }
     }
   }

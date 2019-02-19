@@ -1,6 +1,7 @@
 export const state = () => ({
   collectionName: null,
   admin: false,
+  cachedNames: null
 })
 
 export const mutations = {
@@ -9,6 +10,9 @@ export const mutations = {
   },
   SET_ADMIN(state) {
     state.admin = true
+  },
+  SET_CACHE(state, names) {
+    state.cachedNames = names
   }
 }
 

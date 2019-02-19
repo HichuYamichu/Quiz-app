@@ -7,7 +7,11 @@
           <h1 class="headline">Create new collection</h1>
         </v-flex>
         <v-flex align-self-center>
-          <v-text-field label="collection name" v-model="collectionName" outline></v-text-field>
+          <v-text-field
+            label="collection name"
+            v-model="collectionName"
+            outline
+          ></v-text-field>
         </v-flex>
         <v-flex xs12>
           <v-card dark v-for="(question, index) in questions" :key="index" elevation-15>
@@ -47,6 +51,10 @@
         </v-flex>
       </v-layout>
       <v-btn large @click="create">create collection</v-btn>
+      <v-snackbar v-model="error" :timeout="5000" :top="true">
+        {{ errorMessage }}
+        <v-btn color="pink" flat @click="error = false">Close</v-btn>
+      </v-snackbar>
     </v-container>
   </div>
 </template>
@@ -62,7 +70,9 @@ export default {
   data() {
     return {
       collectionName: "",
-      questions: [{ text: "", answers: [{ text: "", value: false }] }]
+      questions: [{ text: "", answers: [{ text: "", value: false }] }],
+      error: null,
+      errorMessage: ""
     };
   },
   methods: {
@@ -73,10 +83,15 @@ export default {
       this.questions[index].answers.push({ text: "", value: false });
     },
     create: function() {
-      this.$axios.$post("http://localhost:3000/api/new-collection", {
-        name: this.collectionName,
-        questions: this.questions
-      });
+      if (this.collectionName) {
+        this.$axios.$post("http://localhost:3000/api/new-collection", {
+          name: this.collectionName,
+          questions: this.questions
+        });
+      } else {
+        this.error = true;
+        this.errorMessage = "You must specify collection name";
+      }
     }
   }
 };

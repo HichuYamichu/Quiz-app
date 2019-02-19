@@ -1,4 +1,5 @@
-const db = require('./index.js');
+const db = require('./questionsDB');
+const configDB = require('./configDB')
 const ObjectID = require('mongodb').ObjectID;
 const shortid = require('shortid');
 
@@ -7,13 +8,20 @@ module.exports = {
 		const dbInstance = await db();
 		await dbInstance.createCollection(collName);
 		await dbInstance.collection(collName).insertMany(questions);
-	},
+  },
+  
 	async fetchCollection(name) {
 		const dbInstance = await db();
 		const coll = await dbInstance.collection(name);
 		const questions = await coll.find().toArray();
 		return questions
-	},
+  },
+  
+  async fetchCollections() {
+      const dbInstance = await db();
+      const collNames = await dbInstance.listCollections().toArray()
+      return collNames
+  },
 
 	async editCollections(name, questions) {
 		const dbInstance = await db();
@@ -24,22 +32,26 @@ module.exports = {
 	},
 
 	async deleteCollection(name) {
-		const dbInstance = await db();
-		const coll = await dbInstance.collection(name);
-		await coll.drop()
+		try {
+			const dbInstance = await db();
+			const coll = await dbInstance.collection(name);
+			await coll.drop()
+		} catch (err) {
+			return 'Wrong collection name'
+		}
 	},
 
 	async generate(quizName, userName) {
 		const token = shortid.generate();
-		const dbInstance = await db();
-		const coll = await dbInstance.collection('users');
+		const dbInstance = await configDB();
+		const coll = await dbInstance.collection('TOKENS');
 		await coll.insertOne({ username: userName, quiz: quizName, token: token })
 		return token;
 	},
 
 	async authenticateUser(token) {
-		const dbInstance = await db();
-		const coll = await dbInstance.collection('users');
+		const dbInstance = await configDB();
+		const coll = await dbInstance.collection('TOKENS');
 		try {
 			const userObj = await coll.findOne({ token: token })
 			return userObj

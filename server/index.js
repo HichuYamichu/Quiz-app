@@ -2,23 +2,22 @@ const express = require('express')
 const consola = require('consola')
 const { Nuxt, Builder } = require('nuxt')
 const bodyParser = require('body-parser');
-const db = require('./database/index');
+const db = require('./database/configDB');
 const collections = require('./database/collections');
 const app = express()
 const session = require('express-session');
 const MongoStore = require('connect-mongo')(session);
-const helpers = require('./helpers')
 
 const store = new MongoStore({ dbPromise: db() });
 
 app.use(session({
   store: store,
-  secret: process.env.SECRET || 'HIdi65saUB.fds8DAL.;fPOq,(3',
+  secret: process.env.SECRET || 'HIdi}65saUB.fws8DAL.;fPOq,(3',
   resave: false,
   rolling: true,
   saveUninitialized: false,
   cookie: {
-    maxAge: 1000 * 60 * 2
+    maxAge: 1000 * 60 * 4
   }
 }));
 
@@ -53,6 +52,7 @@ app.get('/api/questions', async (req, res) => {
 });
 
 app.post('/api/answers', (req, res) => {
+  req.session.destroy()
   console.log(req.body)
 
   res.sendStatus(200)
@@ -77,6 +77,17 @@ app.get('/api/fetch-collection', async (req, res) => {
   }
 })
 
+app.get('/api/fetch-collection-names', async (req, res) => {
+  try {
+    const collNames = await collections.fetchCollections()
+    const names = collNames.map(collName => collName.name)
+    res.send(names)
+  } catch (err) {
+    console.log(err)
+    res.sendStatus(500)
+  }
+})
+
 app.post('/api/update-collection', async (req, res) => {
   if (req.session.admin) {
     await collections.editCollections(req.body.name, req.body.questions)
@@ -88,8 +99,12 @@ app.post('/api/update-collection', async (req, res) => {
 
 app.delete('/api/delete-collection', async (req, res) => {
   if (req.session.admin) {
-    await collections.deleteCollection(req.body.name)
-    res.sendStatus(200)
+    const err = await collections.deleteCollection(req.body.name)
+    if (err) {
+      res.send(err)
+    } else {
+      res.sendStatus(200)
+    }
   } else {
     res.sendStatus(401)
   }
