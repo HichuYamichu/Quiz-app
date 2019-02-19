@@ -6,6 +6,7 @@
         <v-btn flat block large nuxt to="/admin/edit">edit</v-btn>
         <v-btn flat block large nuxt to="/admin/delete">delete</v-btn>
         <v-btn flat block large nuxt to="/admin/generate">generate token</v-btn>
+        <v-btn flat block large nuxt to="/admin/tokens">list tokens</v-btn>
       </v-toolbar>
     </v-flex>
   </v-layout>

@@ -51,11 +51,16 @@ app.get('/api/questions', async (req, res) => {
   }
 });
 
-app.post('/api/answers', (req, res) => {
+app.post('/api/answers', async (req, res) => {
   req.session.destroy()
   console.log(req.body)
-
-  res.sendStatus(200)
+  try {
+    const results = await collections.checkAnsweres(req.body.answers, req.body.collName)
+    // res.sendStatus(results)
+    res.sendStatus(200)
+  } catch (err) {
+    res.sendStatus(500)
+  }
 });
 
 
@@ -122,6 +127,20 @@ app.post('/api/authenticate', async (req, res) => {
     res.send(user.quiz)
   } else {
     res.sendStatus(404)
+  }
+})
+
+app.get('/api/tokens', async (req, res) => {
+  if (req.session.admin) {
+    try {
+      const tokens = await collections.getTokens()
+      res.send(tokens)
+    } catch (err) {
+      console.log(err)
+      res.sendStatus(500)
+    }
+  } else {
+    res.sendStatus(401)
   }
 })
 

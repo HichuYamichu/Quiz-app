@@ -49,6 +49,13 @@ module.exports = {
 		return token;
 	},
 
+	async getTokens() {
+		const dbInstance = await configDB();
+		const coll = await dbInstance.collection('TOKENS');
+		const tokens = await coll.find().toArray()
+		return tokens
+	},
+
 	async authenticateUser(token) {
 		const dbInstance = await configDB();
 		const coll = await dbInstance.collection('TOKENS');
@@ -58,6 +65,18 @@ module.exports = {
 		} catch (err) {
 			return undefined
 		}
+	},
+
+	async checkAnsweres(answers, collName) {
+		const dbInstance = await db()
+		const coll = await dbInstance.collection(collName);
+		console.log(coll)
+		// answers.forEach(answer => {
+		// 	let match
+		// 	for (i = 0; i < answer.length; i++) {
+
+		// 	}
+		// })
 	}
 
 
