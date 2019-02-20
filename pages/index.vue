@@ -11,7 +11,7 @@ export default {
     return {
       token: "",
       type: "text",
-      label: 'TOKEN'
+      label: "TOKEN"
     };
   },
   methods: {
@@ -26,10 +26,10 @@ export default {
     token: function() {
       if (this.token.charAt(0) == "\\") {
         this.type = "password";
-        this.label = 'Password'
+        this.label = "Password";
       } else {
         this.type = "text";
-        this.label = 'TOKEN'
+        this.label = "TOKEN";
       }
     }
   }

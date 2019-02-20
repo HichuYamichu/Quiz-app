@@ -1,7 +1,7 @@
 <template>
   <v-layout>
     <v-flex>
-      <v-toolbar>
+      <v-toolbar app>
         <v-btn flat block large nuxt to="/admin/new">New</v-btn>
         <v-btn flat block large nuxt to="/admin/edit">edit</v-btn>
         <v-btn flat block large nuxt to="/admin/delete">delete</v-btn>

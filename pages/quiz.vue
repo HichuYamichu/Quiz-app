@@ -47,12 +47,14 @@ export default {
       }
     },
     sendAnswers: async function() {
-      await this.$axios.$post(
+      const res = await this.$axios.$post(
         "http://localhost:3000/api/answers",
         { answers: this.answers, collName: this.$store.state.collectionName}
       );
+      console.log(res)
+      this.$store.commit('SET_SCORE', res)
       this.$router.push({
-        path: "/"
+        path: "/score"
       });
     }
   }

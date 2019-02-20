@@ -53,16 +53,15 @@ app.get('/api/questions', async (req, res) => {
 
 app.post('/api/answers', async (req, res) => {
   req.session.destroy()
-  console.log(req.body)
   try {
     const results = await collections.checkAnsweres(req.body.answers, req.body.collName)
-    // res.sendStatus(results)
-    res.sendStatus(200)
+    console.log(results)
+    res.send({ score: results.score, length: results.length })
   } catch (err) {
+    console.log(err)
     res.sendStatus(500)
   }
 });
-
 
 app.post('/api/new-collection', async (req, res) => {
   if (req.session.admin) {
