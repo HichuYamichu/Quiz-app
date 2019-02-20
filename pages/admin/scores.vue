@@ -9,15 +9,15 @@
             <v-spacer></v-spacer>
             <h1 class="headline">Quiz</h1>
             <v-spacer></v-spacer>
-            <h1 class="headline">Token</h1>
+            <h1 class="headline">Score</h1>
           </v-toolbar>
-          <v-flex xs12 v-for="(token, index) in tokens" :key="index">
+          <v-flex xs12 v-for="(score, index) in scores" :key="index">
             <v-toolbar flat>
-              {{ token.username }}
+              {{ score.username }}
               <v-spacer></v-spacer>
-              {{ token.quiz }}
+              {{ score.quiz }}
               <v-spacer></v-spacer>
-              {{ token.token }}
+              {{ score.score }} / {{ score.max }}
             </v-toolbar>
           </v-flex>
         </v-layout>
@@ -35,16 +35,16 @@ export default {
   },
   middleware: "auth",
   async asyncData({ $axios, store }) {
-    if (!store.state.cachedTokens) {
-      const tokens = await $axios.$get("http://localhost:3000/api/tokens");
-      store.commit("SET_TOKEN_CACHE", tokens);
-      console.log(tokens);
+    if (!store.state.cachedScores) {
+      const scores = await $axios.$get("http://localhost:3000/api/scores");
+      store.commit("SET_SCORES_CACHE", scores);
+      console.log(scores);
       return {
-        tokens: tokens
+        scores: scores
       };
     } else {
       return {
-        tokens: store.state.cachedTokens
+        scores: store.state.cachedScores
       }
     }
   }

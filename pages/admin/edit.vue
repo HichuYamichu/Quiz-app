@@ -79,7 +79,7 @@ export default {
         "http://localhost:3000/api/fetch-collection-names"
       );
       console.log(res)
-      store.commit("SET_CACHE", res);
+      store.commit("SET_NAME_CACHE", res);
       return {
         names: res
       };

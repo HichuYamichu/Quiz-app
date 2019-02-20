@@ -54,7 +54,7 @@ app.get('/api/questions', async (req, res) => {
 app.post('/api/answers', async (req, res) => {
   req.session.destroy()
   try {
-    const results = await collections.checkAnsweres(req.body.answers, req.body.collName)
+    const results = await collections.checkAnsweres(req.body.answers, req.body.user)
     console.log(results)
     res.send({ score: results.score, length: results.length })
   } catch (err) {
@@ -123,7 +123,7 @@ app.post('/api/authenticate', async (req, res) => {
   const user = await collections.authenticateUser(req.body.token)
   if (user) {
     req.session.user = { userName: user.username, token: user.token, quiz: user.quiz }
-    res.send(user.quiz)
+    res.send({ userName: user.username, token: user.token, quiz: user.quiz })
   } else {
     res.sendStatus(404)
   }
@@ -132,8 +132,22 @@ app.post('/api/authenticate', async (req, res) => {
 app.get('/api/tokens', async (req, res) => {
   if (req.session.admin) {
     try {
-      const tokens = await collections.getTokens()
+      const tokens = await collections.fetchTokens()
       res.send(tokens)
+    } catch (err) {
+      console.log(err)
+      res.sendStatus(500)
+    }
+  } else {
+    res.sendStatus(401)
+  }
+})
+
+app.get('/api/scores', async (req, res) => {
+  if (req.session.admin) {
+    try {
+      const scores = await collections.fetchScores()
+      res.send(scores)
     } catch (err) {
       console.log(err)
       res.sendStatus(500)

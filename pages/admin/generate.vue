@@ -27,7 +27,7 @@
           </v-menu>
         </v-flex>
         <v-flex>
-          <v-text-field label="quiz name" v-model="quizName" outline disabled></v-text-field>
+          <h1 class="headline">{{ quizName }}</h1>
         </v-flex>
         <v-flex>
           <v-text-field label="user name" v-model="userName" outline></v-text-field>
@@ -62,7 +62,7 @@ export default {
       const res = await $axios.$get(
         "http://localhost:3000/api/fetch-collection-names"
       );
-      store.commit("SET_CACHE", res);
+      store.commit("SET_NAME_CACHE", res);
       return {
         names: res
       };

@@ -1,21 +1,29 @@
 import { start } from "pretty-error";
 
 export const state = () => ({
-  collectionName: null,
+  user: null,
   admin: false,
   cachedNames: null,
+  cachedTokens: null,
+  cachedScores: null,
   score: null
 })
 
 export const mutations = {
-  PASS(state, name) {
-    state.collectionName = name
+  PASS(state, user) {
+    state.user = user
   },
   SET_ADMIN(state) {
     state.admin = true
   },
-  SET_CACHE(state, names) {
+  SET_NAME_CACHE(state, names) {
     state.cachedNames = names
+  },
+  SET_TOKEN_CACHE(state, tokens) {
+    state.cachedTokens = tokens
+  },
+  SET_SCORES_CACHE(state, scores) {
+    state.cachedScores = scores
   },
   SET_SCORE(state, payload) {
     state.score = {
@@ -28,7 +36,7 @@ export const mutations = {
 export const actions = {
   nuxtServerInit({ commit }, { req }) {
     if (req.session.user) {
-      commit('PASS', req.session.user.quiz)
+      commit('PASS', { username: req.session.user, quiz: req.session.quiz})
     }
   },
 
