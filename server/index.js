@@ -51,11 +51,10 @@ app.get('/api/questions', async (req, res) => {
   }
 });
 
-app.post('/api/answers', async (req, res) => {
+app.post('/api/send-answers', async (req, res) => {
   req.session.destroy()
   try {
     const results = await collections.checkAnsweres(req.body.answers, req.body.user)
-    console.log(results)
     res.send({ score: results.score, length: results.length })
   } catch (err) {
     console.log(err)
@@ -94,8 +93,13 @@ app.get('/api/fetch-collection-names', async (req, res) => {
 
 app.post('/api/update-collection', async (req, res) => {
   if (req.session.admin) {
-    await collections.editCollections(req.body.name, req.body.questions)
-    res.sendStatus(200)
+    try {
+      await collections.editCollections(req.body.name, req.body.questions)
+      res.sendStatus(200)
+    } catch (err) {
+      console.log(err)
+      res.sendStatus(500)
+    }
   } else {
     res / sendStatus(401)
   }
@@ -103,11 +107,10 @@ app.post('/api/update-collection', async (req, res) => {
 
 app.delete('/api/delete-collection', async (req, res) => {
   if (req.session.admin) {
-    const err = await collections.deleteCollection(req.body.name)
-    if (err) {
-      res.send(err)
-    } else {
-      res.sendStatus(200)
+    try {
+      await collections.deleteCollection(req.body.name)
+    } catch (err) {
+      res.sendStatus(404)
     }
   } else {
     res.sendStatus(401)
@@ -119,17 +122,17 @@ app.post('/api/generate-token', async (req, res) => {
   res.send({ token: token })
 })
 
-app.post('/api/authenticate', async (req, res) => {
-  const user = await collections.authenticateUser(req.body.token)
-  if (user) {
+app.post('/api/authenticate-user', async (req, res) => {
+  try {
+    const user = await collections.authenticateUser(req.body.token)
     req.session.user = { userName: user.username, token: user.token, quiz: user.quiz }
     res.send({ userName: user.username, token: user.token, quiz: user.quiz })
-  } else {
+  } catch (err) {
     res.sendStatus(404)
   }
 })
 
-app.get('/api/tokens', async (req, res) => {
+app.get('/api/get-tokens', async (req, res) => {
   if (req.session.admin) {
     try {
       const tokens = await collections.fetchTokens()
@@ -143,7 +146,7 @@ app.get('/api/tokens', async (req, res) => {
   }
 })
 
-app.get('/api/scores', async (req, res) => {
+app.get('/api/get-scores', async (req, res) => {
   if (req.session.admin) {
     try {
       const scores = await collections.fetchScores()

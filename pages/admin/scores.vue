@@ -36,7 +36,7 @@ export default {
   middleware: "auth",
   async asyncData({ $axios, store }) {
     if (!store.state.cachedScores) {
-      const scores = await $axios.$get("http://localhost:3000/api/scores");
+      const scores = await $axios.$get("http://localhost:3000/api/get-scores");
       store.commit("SET_SCORES_CACHE", scores);
       console.log(scores);
       return {
@@ -45,7 +45,7 @@ export default {
     } else {
       return {
         scores: store.state.cachedScores
-      }
+      };
     }
   }
 };

@@ -36,7 +36,7 @@ export const mutations = {
 export const actions = {
   nuxtServerInit({ commit }, { req }) {
     if (req.session.user) {
-      commit('PASS', { username: req.session.user, quiz: req.session.quiz})
+      commit('PASS', { username: req.session.user, quiz: req.session.quiz })
     }
   },
 
@@ -47,7 +47,7 @@ export const actions = {
         commit('SET_ADMIN')
       }
     } else {
-      const responce = await this.$axios.$post('http://localhost:3000/api/authenticate', { token: payload })
+      const responce = await this.$axios.$post('http://localhost:3000/api/authenticate-user', { token: payload })
       console.log(responce)
       commit('PASS', responce)
       this.$router.push('/quiz')

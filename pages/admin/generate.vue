@@ -13,28 +13,28 @@
     <v-container grid-list-xl text-xs-center>
       <v-layout column warp>
         <v-card>
-        <v-flex align-self-center xs12>
-          <h1 class="headline">Generate token for user</h1>
-        </v-flex>
-        <v-flex>
-          <v-menu offset-y>
-            <v-btn slot="activator" dark block large>Choose quiz to generate user token for</v-btn>
-            <v-list>
-              <v-list-tile v-for="(name, index) in names" :key="index" @click="setName(index)">
-                <v-list-tile-title>{{ name }}</v-list-tile-title>
-              </v-list-tile>
-            </v-list>
-          </v-menu>
-        </v-flex>
-        <v-flex>
-          <h1 class="headline">{{ quizName }}</h1>
-        </v-flex>
-        <v-flex>
-          <v-text-field label="user name" v-model="userName" outline></v-text-field>
-        </v-flex>
-        <v-flex>
-          <v-btn @click="generate">Generate</v-btn>
-        </v-flex>
+          <v-flex align-self-center xs12>
+            <h1 class="headline">Generate token for user</h1>
+          </v-flex>
+          <v-flex>
+            <v-menu offset-y>
+              <v-btn slot="activator" dark block large>Choose quiz to generate user token for</v-btn>
+              <v-list>
+                <v-list-tile v-for="(name, index) in names" :key="index" @click="setName(index)">
+                  <v-list-tile-title>{{ name }}</v-list-tile-title>
+                </v-list-tile>
+              </v-list>
+            </v-menu>
+          </v-flex>
+          <v-flex>
+            <h1 class="headline">{{ quizName }}</h1>
+          </v-flex>
+          <v-flex>
+            <v-text-field label="user name" v-model="userName" outline v-on:keyup.enter="generate"></v-text-field>
+          </v-flex>
+          <v-flex>
+            <v-btn @click="generate">Generate</v-btn>
+          </v-flex>
         </v-card>
       </v-layout>
     </v-container>

@@ -32,20 +32,18 @@ module.exports = {
   },
 
   async deleteCollection(name) {
-    try {
-      const dbInstance = await db();
-      const coll = await dbInstance.collection(name);
-      await coll.drop()
-    } catch (err) {
-      return 'Wrong collection name'
-    }
+
+    const dbInstance = await db();
+    const coll = await dbInstance.collection(name);
+    await coll.drop()
   },
 
   async generate(quizName, userName) {
     const token = shortid.generate();
     const dbInstance = await configDB();
     const coll = await dbInstance.collection('TOKENS');
-    await coll.insertOne({ username: userName, quiz: quizName, token: token })
+    coll.createIndex({ "lastModifiedDate": 1 }, { expireAfterSeconds: 20 })
+    await coll.insertOne({ createdAt: new Date(), username: userName, quiz: quizName, token: token })
     return token;
   },
 

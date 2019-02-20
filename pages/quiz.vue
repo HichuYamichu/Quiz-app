@@ -48,7 +48,7 @@ export default {
     },
     sendAnswers: async function() {
       const res = await this.$axios.$post(
-        "http://localhost:3000/api/answers",
+        "http://localhost:3000/api/send-answers",
         { answers: this.answers, user: this.$store.state.user}
       );
       console.log(res)

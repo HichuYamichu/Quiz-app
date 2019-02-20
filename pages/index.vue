@@ -1,6 +1,6 @@
 <template>
   <div class="main">
-    <v-text-field :label="label" :type="type" v-model="token" outline></v-text-field>
+    <v-text-field :label="label" :type="type" v-model="token" outline v-on:keyup.enter="go"></v-text-field>
     <v-btn @click="go">GO</v-btn>
   </div>
 </template>
@@ -16,9 +16,11 @@ export default {
   },
   methods: {
     go: async function() {
-      await this.$store.dispatch("handeRequest", this.token);
-      if (this.$store.state.admin) {
-        this.$router.push("/admin/new");
+      if (this.token) {
+        await this.$store.dispatch("handeRequest", this.token);
+        if (this.$store.state.admin) {
+          this.$router.push("/admin/new");
+        }
       }
     }
   },

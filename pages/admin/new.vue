@@ -7,11 +7,7 @@
           <h1 class="headline">Create new collection</h1>
         </v-flex>
         <v-flex align-self-center>
-          <v-text-field
-            label="collection name"
-            v-model="collectionName"
-            outline
-          ></v-text-field>
+          <v-text-field label="collection name" v-model="collectionName" outline></v-text-field>
         </v-flex>
         <v-flex xs12>
           <v-card dark v-for="(question, index) in questions" :key="index" elevation-15>

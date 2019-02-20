@@ -36,7 +36,7 @@ export default {
   middleware: "auth",
   async asyncData({ $axios, store }) {
     if (!store.state.cachedTokens) {
-      const tokens = await $axios.$get("http://localhost:3000/api/tokens");
+      const tokens = await $axios.$get("http://localhost:3000/api/get-tokens");
       store.commit("SET_TOKEN_CACHE", tokens);
       console.log(tokens);
       return {
@@ -45,7 +45,7 @@ export default {
     } else {
       return {
         tokens: store.state.cachedTokens
-      }
+      };
     }
   }
 };
