@@ -19,7 +19,8 @@ module.exports = {
 
   async fetchCollections() {
     const dbInstance = await DBs.mainDB();
-    const collNames = await dbInstance.listCollections().toArray();
+    const collections = await dbInstance.listCollections().toArray();
+    const collNames = collections.map(coll => coll.name);
     return collNames;
   },
 
@@ -41,7 +42,7 @@ module.exports = {
     const token = shortid.generate();
     const dbInstance = await DBs.configDB();
     const coll = await dbInstance.collection('TOKENS');
-    coll.createIndex({ lastModifiedDate: 1 }, { expireAfterSeconds: 20 });
+    coll.createIndex({ createdAt: 1 }, { expireAfterSeconds: 3600 });
     await coll.insertOne({ createdAt: new Date(), username: userName, quiz: quizName, token: token });
     return token;
   },

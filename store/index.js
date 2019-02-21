@@ -1,4 +1,4 @@
-import { start } from 'pretty-error';
+import { start } from "pretty-error";
 
 export const state = () => ({
   user: null,
@@ -36,21 +36,34 @@ export const mutations = {
 export const actions = {
   nuxtServerInit({ commit }, { req }) {
     if (req.session.user) {
-      commit('PASS', { username: req.session.user, quiz: req.session.quiz });
+      commit("PASS", { username: req.session.user, quiz: req.session.quiz });
     }
   },
 
   async handeRequest({ commit }, payload) {
-    if (payload.charAt(0) === '\\') {
-      const responce = await this.$axios.$post('http://localhost:3000/api/login', { password: payload.substr(1) });
-      if (responce.admin) {
-        commit('SET_ADMIN');
+    if (payload.charAt(0) === "\\") {
+      try {
+        const responce = await this.$axios.$post(
+          "http://localhost:3000/api/login",
+          { password: payload.substr(1) }
+        );
+        if (responce.admin) {
+          commit("SET_ADMIN");
+        }
+      } catch (err) {
+        console.log(err);
       }
     } else {
-      const responce = await this.$axios.$post('http://localhost:3000/api/authenticate-user', { token: payload });
-      console.log(responce);
-      commit('PASS', responce);
-      this.$router.push('/quiz');
+      try {
+        const responce = await this.$axios.$post(
+          "http://localhost:3000/api/authenticate-user",
+          { token: payload }
+        );
+        commit("PASS", responce);
+        this.$router.push("/quiz");
+      } catch (err) {
+        console.log(err);
+      }
     }
   }
 };

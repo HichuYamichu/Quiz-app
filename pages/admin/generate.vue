@@ -5,7 +5,7 @@
         <v-card-title class="headline">Generated token:</v-card-title>
         <v-card-text>{{ dialogMessage }}</v-card-text>
         <v-card-actions>
-          <v-btn flat="flat" @click="dialog = false">OK</v-btn>
+          <v-btn flat block color="cyan" @click="dialog = false">OK</v-btn>
         </v-card-actions>
       </v-card>
     </v-dialog>
@@ -38,6 +38,10 @@
         </v-card>
       </v-layout>
     </v-container>
+    <v-snackbar v-model="error" :timeout="5000" :top="true">
+      {{ errorMessage }}
+      <v-btn color="pink" flat @click="error = false">Close</v-btn>
+    </v-snackbar>
   </div>
 </template>
 
@@ -54,7 +58,9 @@ export default {
       quizName: "",
       userName: "",
       dialog: false,
-      dialogMessage: ""
+      dialogMessage: "",
+      error: null,
+      errorMessage: ""
     };
   },
   async asyncData({ $axios, store }) {
@@ -74,12 +80,17 @@ export default {
   },
   methods: {
     generate: async function() {
-      const responce = await this.$axios.$post(
-        "http://localhost:3000/api/generate-token",
-        { quizName: this.quizName, userName: this.userName }
-      );
-      this.dialogMessage = responce.token;
-      this.dialog = true;
+      if (this.userName && this.quizName) {
+        const responce = await this.$axios.$post(
+          "http://localhost:3000/api/generate-token",
+          { quizName: this.quizName, userName: this.userName }
+        );
+        this.dialogMessage = responce.token;
+        this.dialog = true;
+      } else {
+        this.errorMessage = 'You must specify username and quiz name';
+        this.error = true
+      }
     },
     setName: function(index) {
       this.quizName = this.names[index];

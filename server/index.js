@@ -24,11 +24,11 @@ app.use(session({
 app.use(bodyParser.json());
 
 app.post('/api/login', (req, res) => {
-  if (req.body.password === process.env.PASSWORD || 'Qwerty123') {
+  if (req.body.password === (process.env.PASSWORD || 'Qwerty123')) {
     req.session.admin = true;
     res.send({ admin: true });
   } else {
-    res.send(401);
+    res.sendStatus(401);
   }
 });
 
@@ -83,8 +83,7 @@ app.get('/api/fetch-collection', async (req, res) => {
 app.get('/api/fetch-collection-names', async (req, res) => {
   try {
     const collNames = await collections.fetchCollections();
-    const names = collNames.map(collName => collName.name);
-    res.send(names);
+    res.send(collNames);
   } catch (err) {
     console.log(err);
     res.sendStatus(500);
@@ -111,7 +110,7 @@ app.delete('/api/delete-collection', async (req, res) => {
       await collections.deleteCollection(req.body.name);
       res.sendStatus(200);
     } catch (err) {
-      res.sendStatus(404);
+      res.send('Collection not found!');
     }
   } else {
     res.sendStatus(401);

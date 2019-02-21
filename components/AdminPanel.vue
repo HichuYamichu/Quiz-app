@@ -1,7 +1,21 @@
 <template>
-  <v-layout>
+  <v-layout v-touch="{
+      right: () => swipe('Right'),
+    }">
     <v-flex>
-      <v-toolbar app>
+      <v-navigation-drawer temporary v-if="$device.isMobile" v-model="drawer" absolute>
+        <v-toolbar flat class="transparent">
+          <v-list>
+            <v-btn flat block large nuxt to="/admin/new">New</v-btn>
+            <v-btn flat block large nuxt to="/admin/edit">edit</v-btn>
+            <v-btn flat block large nuxt to="/admin/delete">delete</v-btn>
+            <v-btn flat block large nuxt to="/admin/generate">generate token</v-btn>
+            <v-btn flat block large nuxt to="/admin/tokens">list tokens</v-btn>
+            <v-btn flat block large nuxt to="/admin/scores">list scores</v-btn>
+          </v-list>
+        </v-toolbar>
+      </v-navigation-drawer>
+      <v-toolbar app v-if="$device.isDesktop">
         <v-btn flat block large nuxt to="/admin/new">New</v-btn>
         <v-btn flat block large nuxt to="/admin/edit">edit</v-btn>
         <v-btn flat block large nuxt to="/admin/delete">delete</v-btn>
@@ -14,7 +28,19 @@
 </template>
 
 <script>
-export default {};
+export default {
+  data() {
+    return {
+      drawer: true
+    };
+  },
+  methods: {
+    swipe: function() {
+      console.log("swipe");
+      this.drawer = true;
+    }
+  }
+};
 </script>
 
 <style>
