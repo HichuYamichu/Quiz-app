@@ -1,30 +1,30 @@
-const db = require('./questionsDB');
-const configDB = require('./configDB');
+const DBs = require('./index');
 const ObjectID = require('mongodb').ObjectID;
 const shortid = require('shortid');
+shortid.characters('0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ$@');
 
 module.exports = {
   async createCollection(collName, questions) {
-    const dbInstance = await db();
+    const dbInstance = await DBs.mainDB();
     await dbInstance.createCollection(collName);
     await dbInstance.collection(collName).insertMany(questions);
   },
 
   async fetchCollection(name) {
-    const dbInstance = await db();
+    const dbInstance = await DBs.mainDB();
     const coll = await dbInstance.collection(name);
     const questions = await coll.find().toArray();
     return questions
   },
 
   async fetchCollections() {
-    const dbInstance = await db();
+    const dbInstance = await DBs.mainDB();
     const collNames = await dbInstance.listCollections().toArray()
     return collNames
   },
 
   async editCollections(name, questions) {
-    const dbInstance = await db();
+    const dbInstance = await DBs.mainDB();
     const coll = await dbInstance.collection(name);
     questions.forEach(question => {
       coll.updateOne({ _id: new ObjectID(question._id) }, { $set: { "text": question.text, "answers": question.answers } }, { upsert: true })
@@ -33,14 +33,14 @@ module.exports = {
 
   async deleteCollection(name) {
 
-    const dbInstance = await db();
+    const dbInstance = await DBs.mainDB();
     const coll = await dbInstance.collection(name);
     await coll.drop()
   },
 
   async generate(quizName, userName) {
     const token = shortid.generate();
-    const dbInstance = await configDB();
+    const dbInstance = await DBs.configDB();
     const coll = await dbInstance.collection('TOKENS');
     coll.createIndex({ "lastModifiedDate": 1 }, { expireAfterSeconds: 20 })
     await coll.insertOne({ createdAt: new Date(), username: userName, quiz: quizName, token: token })
@@ -48,14 +48,14 @@ module.exports = {
   },
 
   async fetchTokens() {
-    const dbInstance = await configDB();
+    const dbInstance = await DBs.configDB();
     const coll = await dbInstance.collection('TOKENS');
     const tokens = await coll.find().toArray()
     return tokens
   },
 
   async authenticateUser(token) {
-    const dbInstance = await configDB();
+    const dbInstance = await DBs.configDB();
     const coll = await dbInstance.collection('TOKENS');
     try {
       const userObj = await coll.findOne({ token: token })
@@ -66,7 +66,7 @@ module.exports = {
   },
 
   async checkAnsweres(recivedAnswers, user) {
-    const dbInstance = await db();
+    const dbInstance = await DBs.mainDB();
     const dbInstance2 = await configDB();
     const coll = await dbInstance.collection(user.quiz).find().toArray()
     const answersFromDB = coll.map(document => document.answers);
@@ -88,7 +88,7 @@ module.exports = {
   },
 
   async fetchScores() {
-    const dbInstance = await configDB();
+    const dbInstance = await DBs.configDB();
     const coll = await dbInstance.collection('scores');
     const scores = await coll.find().toArray()
     return scores

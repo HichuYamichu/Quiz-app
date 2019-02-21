@@ -78,7 +78,7 @@ export default {
       const res = await $axios.$get(
         "http://localhost:3000/api/fetch-collection-names"
       );
-      console.log(res)
+      console.log(res);
       store.commit("SET_NAME_CACHE", res);
       return {
         names: res

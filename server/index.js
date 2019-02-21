@@ -2,13 +2,13 @@ const express = require('express')
 const consola = require('consola')
 const { Nuxt, Builder } = require('nuxt')
 const bodyParser = require('body-parser');
-const db = require('./database/configDB');
+const DBs = require('./database/index');
 const collections = require('./database/collections');
 const app = express()
 const session = require('express-session');
 const MongoStore = require('connect-mongo')(session);
 
-const store = new MongoStore({ dbPromise: db() });
+const store = new MongoStore({ dbPromise: DBs.configDB() });
 
 app.use(session({
   store: store,
@@ -158,6 +158,10 @@ app.get('/api/get-scores', async (req, res) => {
   } else {
     res.sendStatus(401)
   }
+})
+
+process.on('unhandledRejection', (reason, p) => {
+  console.log('Unhandled Rejection at:', p, 'reason:', reason)
 })
 
 // Import and Set Nuxt.js options
