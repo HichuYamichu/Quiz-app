@@ -1,0 +1,28 @@
+{
+    "extends": "aqua/vue",
+    "env": {
+        "node": true,
+        "es6": true
+    },
+    "parserOptions": {
+        "ecmaVersion": 2017,
+        "sourceType": "module"
+    },
+    "rules": {
+        "no-console": "off",
+        "semi": "error",
+        "comma-spacing": "error",
+        "comma-style": "error",
+        "curly": ["error", "multi-line", "consistent"],
+        "dot-location": ["error", "property"],
+        "indent": ["error", 2],
+        "no-var": "error",
+        "space-before-function-paren": ["error", {
+            "anonymous": "never",
+            "named": "never",
+            "asyncArrow": "always"
+        }],
+				"radix": "off",
+				"no-negated-condition": "off"
+    }
+}

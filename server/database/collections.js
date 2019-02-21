@@ -14,85 +14,79 @@ module.exports = {
     const dbInstance = await DBs.mainDB();
     const coll = await dbInstance.collection(name);
     const questions = await coll.find().toArray();
-    return questions
+    return questions;
   },
 
   async fetchCollections() {
     const dbInstance = await DBs.mainDB();
-    const collNames = await dbInstance.listCollections().toArray()
-    return collNames
+    const collNames = await dbInstance.listCollections().toArray();
+    return collNames;
   },
 
   async editCollections(name, questions) {
     const dbInstance = await DBs.mainDB();
     const coll = await dbInstance.collection(name);
     questions.forEach(question => {
-      coll.updateOne({ _id: new ObjectID(question._id) }, { $set: { "text": question.text, "answers": question.answers } }, { upsert: true })
+      coll.updateOne({ _id: new ObjectID(question._id) }, { $set: { text: question.text, answers: question.answers } }, { upsert: true });
     });
   },
 
   async deleteCollection(name) {
-
     const dbInstance = await DBs.mainDB();
     const coll = await dbInstance.collection(name);
-    await coll.drop()
+    await coll.drop();
   },
 
   async generate(quizName, userName) {
     const token = shortid.generate();
     const dbInstance = await DBs.configDB();
     const coll = await dbInstance.collection('TOKENS');
-    coll.createIndex({ "lastModifiedDate": 1 }, { expireAfterSeconds: 20 })
-    await coll.insertOne({ createdAt: new Date(), username: userName, quiz: quizName, token: token })
+    coll.createIndex({ lastModifiedDate: 1 }, { expireAfterSeconds: 20 });
+    await coll.insertOne({ createdAt: new Date(), username: userName, quiz: quizName, token: token });
     return token;
   },
 
   async fetchTokens() {
     const dbInstance = await DBs.configDB();
     const coll = await dbInstance.collection('TOKENS');
-    const tokens = await coll.find().toArray()
-    return tokens
+    const tokens = await coll.find().toArray();
+    return tokens;
   },
 
   async authenticateUser(token) {
     const dbInstance = await DBs.configDB();
     const coll = await dbInstance.collection('TOKENS');
-    try {
-      const userObj = await coll.findOne({ token: token })
-      return userObj
-    } catch (err) {
-      return undefined
-    }
+    const userObj = await coll.findOne({ token: token });
+    return userObj;
   },
 
   async checkAnsweres(recivedAnswers, user) {
     const dbInstance = await DBs.mainDB();
-    const dbInstance2 = await configDB();
-    const coll = await dbInstance.collection(user.quiz).find().toArray()
+    const dbInstance2 = await DBs.configDB();
+    const coll = await dbInstance.collection(user.quiz).find().toArray();
     const answersFromDB = coll.map(document => document.answers);
     let points = 0;
     let match;
-    for (i = 0; i < recivedAnswers.length; i++) {
-      for (j = 0; j < recivedAnswers[i].length; j++) {
-        if (recivedAnswers[i][j].value === answersFromDB[i][j].value) match = true
-        else {
-          match = false
-          break
+    for (let i = 0; i < recivedAnswers.length; i++) {
+      for (let j = 0; j < recivedAnswers[i].length; j++) {
+        if (recivedAnswers[i][j].value === answersFromDB[i][j].value) {
+          match = true;
+        } else {
+          match = false;
+          break;
         }
       }
-      if (match) points++
+      if (match) points++;
     }
-    const collectionLength = coll.length
-    await dbInstance2.collection('scores').insertOne({ username: user.userName, quiz: user.quiz, score: points, max: collectionLength })
-    return { score: points, length: collectionLength }
+    const collectionLength = coll.length;
+    await dbInstance2.collection('scores').insertOne({ username: user.userName, quiz: user.quiz, score: points, max: collectionLength });
+    return { score: points, length: collectionLength };
   },
 
   async fetchScores() {
     const dbInstance = await DBs.configDB();
     const coll = await dbInstance.collection('scores');
-    const scores = await coll.find().toArray()
-    return scores
+    const scores = await coll.find().toArray();
+    return scores;
   }
-
-
-}
+};

@@ -38,7 +38,6 @@ export default {
     if (!store.state.cachedScores) {
       const scores = await $axios.$get("http://localhost:3000/api/get-scores");
       store.commit("SET_SCORES_CACHE", scores);
-      console.log(scores);
       return {
         scores: scores
       };

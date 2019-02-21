@@ -51,7 +51,6 @@ export default {
         "http://localhost:3000/api/send-answers",
         { answers: this.answers, user: this.$store.state.user}
       );
-      console.log(res)
       this.$store.commit('SET_SCORE', res)
       this.$router.push({
         path: "/score"
