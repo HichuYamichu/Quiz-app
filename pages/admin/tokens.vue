@@ -34,18 +34,11 @@ export default {
     AdminPanel
   },
   middleware: "auth",
-  async asyncData({ $axios, store }) {
-    if (!store.state.cachedTokens) {
-      const tokens = await $axios.$get("http://localhost:3000/api/get-tokens");
-      store.commit("SET_TOKEN_CACHE", tokens);
-      return {
-        tokens: tokens
-      };
-    } else {
-      return {
-        tokens: store.state.cachedTokens
-      };
-    }
+  async asyncData({ $axios }) {
+    const tokens = await $axios.$get("http://localhost:3000/api/get-tokens");
+    return {
+      tokens: tokens
+    };
   }
 };
 </script>

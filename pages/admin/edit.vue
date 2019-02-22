@@ -73,20 +73,13 @@ export default {
       questions: []
     };
   },
-  async asyncData({ $axios, store }) {
-    if (!store.state.cachedNames) {
-      const res = await $axios.$get(
-        "http://localhost:3000/api/fetch-collection-names"
-      );
-      store.commit("SET_NAME_CACHE", res);
-      return {
-        names: res
-      };
-    } else {
-      return {
-        names: store.state.cachedNames
-      };
-    }
+  async asyncData({ $axios }) {
+    const res = await $axios.$get(
+      "http://localhost:3000/api/fetch-collection-names"
+    );
+    return {
+      names: res
+    };
   },
   methods: {
     addQuestion: function() {

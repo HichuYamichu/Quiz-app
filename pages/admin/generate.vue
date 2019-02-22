@@ -63,20 +63,13 @@ export default {
       errorMessage: ""
     };
   },
-  async asyncData({ $axios, store }) {
-    if (!store.state.cachedNames) {
-      const res = await $axios.$get(
-        "http://localhost:3000/api/fetch-collection-names"
-      );
-      store.commit("SET_NAME_CACHE", res);
-      return {
-        names: res
-      };
-    } else {
-      return {
-        names: store.state.cachedNames
-      };
-    }
+  async asyncData({ $axios }) {
+    const res = await $axios.$get(
+      "http://localhost:3000/api/fetch-collection-names"
+    );
+    return {
+      names: res
+    };
   },
   methods: {
     generate: async function() {
@@ -88,8 +81,8 @@ export default {
         this.dialogMessage = responce.token;
         this.dialog = true;
       } else {
-        this.errorMessage = 'You must specify username and quiz name';
-        this.error = true
+        this.errorMessage = "You must specify username and quiz name";
+        this.error = true;
       }
     },
     setName: function(index) {

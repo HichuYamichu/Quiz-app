@@ -79,14 +79,14 @@ export default {
       this.questions[index].answers.push({ text: "", value: false });
     },
     create: function() {
-      if (this.collectionName) {
+      if (this.collectionName && !this.collectionName.includes('.')) {
         this.$axios.$post("http://localhost:3000/api/new-collection", {
           name: this.collectionName,
           questions: this.questions
         });
       } else {
         this.error = true;
-        this.errorMessage = "You must specify collection name";
+        this.errorMessage = "Collection name must not be empty or contain .";
       }
     }
   }

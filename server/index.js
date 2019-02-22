@@ -160,6 +160,20 @@ app.get('/api/get-scores', async (req, res) => {
   }
 });
 
+app.delete('/api/delete-scores', async (req, res) => {
+  if (req.session.admin) {
+    try {
+      await collections.deleteScores(req.body);
+      res.sendStatus(200);
+    } catch (err) {
+      console.log(err);
+      res.sendStatus(500);
+    }
+  } else {
+    res.sendStatus(401);
+  }
+});
+
 process.on('unhandledRejection', (reason, p) => {
   console.log('Unhandled Rejection at:', p, 'reason:', reason);
 });

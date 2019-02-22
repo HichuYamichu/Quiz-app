@@ -89,5 +89,11 @@ module.exports = {
     const coll = await dbInstance.collection('scores');
     const scores = await coll.find().toArray();
     return scores;
+  },
+
+  async deleteScores(score) {
+    const dbInstance = await DBs.configDB();
+    const coll = await dbInstance.collection('scores');
+    await coll.deleteOne({ _id: new ObjectID(score._id) });
   }
 };
