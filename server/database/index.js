@@ -1,18 +1,18 @@
+let _configDB;
+let _mainDB;
+
 async function connect() {
-  const MongoClient = require('mongodb').MongoClient;
+	const MongoClient = require('mongodb').MongoClient;
   const url = 'mongodb://localhost:27017';
   const client = await MongoClient.connect(url, { useNewUrlParser: true });
-  return client;
+	_mainDB = client.db('quizCollections');
+	const configurationDB = await client.db('quiz');
+	_configDB = configurationDB;
+	return configurationDB;
 }
 
-module.exports.mainDB = async () => {
-  const client = await connect();
-  const mainDB = client.db('quizCollections');
-  return mainDB;
-};
+const configDB = () => _configDB
+const mainDB = () => _mainDB
 
-module.exports.configDB = async () => {
-  const client = await connect();
-  const configDB = await client.db('quiz');
-  return configDB;
-};
+
+module.exports = { configDB, mainDB, connect }

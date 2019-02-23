@@ -11,6 +11,12 @@ export const mutations = {
   SET_ADMIN(state) {
     state.admin = true;
   },
+	SET_SCORE(state, payload) {
+    state.score = {
+      achived: payload.score,
+      max: payload.length
+    }
+  }
 };
 
 export const actions = {
