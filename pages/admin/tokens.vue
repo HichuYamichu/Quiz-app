@@ -35,7 +35,7 @@ export default {
   },
   middleware: "auth",
   async asyncData({ $axios }) {
-    const tokens = await $axios.$get("http://localhost:3000/api/get-tokens");
+    const tokens = await $axios.$get("/api/get-tokens");
     return {
       tokens: tokens
     };

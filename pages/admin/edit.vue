@@ -75,7 +75,7 @@ export default {
   },
   async asyncData({ $axios }) {
     const res = await $axios.$get(
-      "http://localhost:3000/api/fetch-collection-names"
+      "/api/fetch-collection-names"
     );
     return {
       names: res
@@ -89,14 +89,14 @@ export default {
       this.questions[index].answers.push({ text: "", value: false });
     },
     update: async function() {
-      await this.$axios.$post("http://localhost:3000/api/update-collection", {
+      await this.$axios.$post("/api/update-collection", {
         name: this.collectionName,
         questions: this.questions
       });
     },
     find: async function() {
       const res = await this.$axios.$get(
-        `http://localhost:3000/api/fetch-collection?name=${this.collectionName}`
+        `/api/fetch-collection?name=${this.collectionName}`
       );
       this.questions = [];
       res.forEach(question => {

@@ -65,7 +65,7 @@ export default {
   },
   async asyncData({ $axios }) {
     const res = await $axios.$get(
-      "http://localhost:3000/api/fetch-collection-names"
+      "/api/fetch-collection-names"
     );
     return {
       names: res
@@ -75,7 +75,7 @@ export default {
     generate: async function() {
       if (this.userName && this.quizName) {
         const responce = await this.$axios.$post(
-          "http://localhost:3000/api/generate-token",
+          "/api/generate-token",
           { quizName: this.quizName, userName: this.userName }
         );
         this.dialogMessage = responce.token;

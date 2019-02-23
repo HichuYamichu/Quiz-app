@@ -30,7 +30,7 @@ export const actions = {
     if (payload.charAt(0) === "\\") {
       try {
         const responce = await this.$axios.$post(
-          "http://localhost:3000/api/login",
+          "/api/login",
           { password: payload.substr(1) }
         );
         if (responce.admin) {
@@ -42,7 +42,7 @@ export const actions = {
     } else {
       try {
         const responce = await this.$axios.$post(
-          "http://localhost:3000/api/authenticate-user",
+          "/api/authenticate-user",
           { token: payload }
         );
         commit("PASS", responce);

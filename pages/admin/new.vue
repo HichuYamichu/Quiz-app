@@ -80,7 +80,7 @@ export default {
     },
     create: function() {
       if (this.collectionName && !this.collectionName.includes('.')) {
-        this.$axios.$post("http://localhost:3000/api/new-collection", {
+        this.$axios.$post("/api/new-collection", {
           name: this.collectionName,
           questions: this.questions
         });

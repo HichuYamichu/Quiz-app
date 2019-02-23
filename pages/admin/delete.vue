@@ -45,7 +45,7 @@ export default {
   methods: {
     deleteCollection: async function() {
       const res = await this.$axios.$delete(
-        "http://localhost:3000/api/delete-collection",
+        "/api/delete-collection",
         { data: { name: this.name } }
       );
       if (res) {

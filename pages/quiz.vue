@@ -25,7 +25,7 @@ export default {
   },
   async asyncData({ $axios, store }) {
     const Questions = await $axios.$get(
-      `http://localhost:3000/api/questions?name=${store.state.user.quiz}`
+      `/api/questions?name=${store.state.user.quiz}`
     );
     return {
       questions: Questions
@@ -48,7 +48,7 @@ export default {
     },
     sendAnswers: async function() {
       const res = await this.$axios.$post(
-        "http://localhost:3000/api/send-answers",
+        "/api/send-answers",
         { answers: this.answers, user: this.$store.state.user}
       );
       this.$store.commit('SET_SCORE', res)
