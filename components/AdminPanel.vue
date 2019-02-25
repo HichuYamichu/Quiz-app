@@ -1,9 +1,7 @@
 <template>
-  <v-layout v-touch="{
-      right: () => swipe('Right'),
-    }">
+  <v-layout>
     <v-flex>
-      <v-navigation-drawer temporary v-if="$device.isMobile" v-model="drawer" absolute>
+      <v-navigation-drawer temporary v-if="$device.isMobile" v-model="drawerOn" absolute>
         <v-toolbar flat class="transparent">
           <v-list>
             <v-btn flat block large nuxt to="/admin/new">New</v-btn>
@@ -29,16 +27,16 @@
 
 <script>
 export default {
+  props: ["drawer"],
+  watch: {
+    drawer: function(newVal) {
+      this.drawerOn = newVal;
+    }
+  },
   data() {
     return {
-      drawer: true
+      drawerOn: false
     };
-  },
-  methods: {
-    swipe: function() {
-      console.log("swipe");
-      this.drawer = true;
-    }
   }
 };
 </script>

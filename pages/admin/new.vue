@@ -1,9 +1,11 @@
 <template>
-  <div>
-    <admin-panel/>
-    <v-container grid-list-xl text-xs-center>
+  <div v-touch="{
+      right: () => swipe()
+    }">
+    <admin-panel :drawer="drawerVisible"/>
+    <v-container grid-list-xl text-xs-center fluid>
       <v-layout column wrap>
-        <v-flex align-self-center>
+        <v-flex align-self-center xs12>
           <h1 class="headline">Create new collection</h1>
         </v-flex>
         <v-flex align-self-center>
@@ -13,7 +15,7 @@
           <v-card dark v-for="(question, index) in questions" :key="index" elevation-15>
             <v-layout row wrap>
               <v-flex xs12>
-                <h3 class="headline">Question: {{ index + 1}}</h3>
+                <h3 class="headline">Question: {{ index + 1 }}</h3>
               </v-flex>
               <v-flex xs8 offset-xs1>
                 <v-text-field label="Question text" outline v-model="question.text"></v-text-field>
@@ -59,6 +61,7 @@
 import AdminPanel from "@/components/AdminPanel";
 
 export default {
+  layout: "admin",
   components: {
     AdminPanel
   },
@@ -68,7 +71,8 @@ export default {
       collectionName: "",
       questions: [{ text: "", answers: [{ text: "", value: false }] }],
       error: null,
-      errorMessage: ""
+      errorMessage: "",
+      drawerVisible: true
     };
   },
   methods: {
@@ -79,7 +83,7 @@ export default {
       this.questions[index].answers.push({ text: "", value: false });
     },
     create: function() {
-      if (this.collectionName && !this.collectionName.includes('.')) {
+      if (this.collectionName && !this.collectionName.includes(".")) {
         this.$axios.$post("/api/new-collection", {
           name: this.collectionName,
           questions: this.questions
@@ -88,6 +92,9 @@ export default {
         this.error = true;
         this.errorMessage = "Collection name must not be empty or contain .";
       }
+    },
+    swipe: function() {
+      this.drawerVisible = !this.drawerVisible;
     }
   }
 };

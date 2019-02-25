@@ -1,5 +1,7 @@
 <template>
-  <div>
+  <div v-touch="{
+      right: () => swipe()
+    }">
     <v-dialog v-model="dialog" max-width="290">
       <v-card>
         <v-card-title class="headline">Generated token:</v-card-title>
@@ -9,7 +11,7 @@
         </v-card-actions>
       </v-card>
     </v-dialog>
-    <admin-panel/>
+    <admin-panel :drawer="drawerVisible"/>
     <v-container grid-list-xl text-xs-center>
       <v-layout column warp>
         <v-card>
@@ -60,33 +62,44 @@ export default {
       dialog: false,
       dialogMessage: "",
       error: null,
-      errorMessage: ""
+      errorMessage: "",
+      drawerVisible: false
     };
   },
-  async asyncData({ $axios }) {
-    const res = await $axios.$get(
-      "/api/fetch-collection-names"
-    );
-    return {
-      names: res
-    };
+  async asyncData({ $axios, redirect }) {
+    try {
+      const res = await $axios.$get("/api/fetch-collection-names");
+      return {
+        names: res
+      };
+    } catch (err) {
+      redirect("/");
+    }
   },
   methods: {
     generate: async function() {
-      if (this.userName && this.quizName) {
-        const responce = await this.$axios.$post(
-          "/api/generate-token",
-          { quizName: this.quizName, userName: this.userName }
-        );
-        this.dialogMessage = responce.token;
-        this.dialog = true;
-      } else {
-        this.errorMessage = "You must specify username and quiz name";
-        this.error = true;
+      try {
+        if (this.userName && this.quizName) {
+          const responce = await this.$axios.$post("/api/generate-token", {
+            quizName: this.quizName,
+            userName: this.userName
+          });
+          this.dialogMessage = responce.token;
+          this.dialog = true;
+        } else {
+          this.errorMessage = "You must specify username and quiz name";
+          this.error = true;
+        }
+      } catch (err) {
+        console.log(err);
+        this$router.push("/");
       }
     },
     setName: function(index) {
       this.quizName = this.names[index];
+    },
+    swipe: function() {
+      this.drawerVisible = !this.drawerVisible;
     }
   }
 };

@@ -1,6 +1,8 @@
 <template>
-  <div>
-    <admin-panel/>
+  <div v-touch="{
+      right: () => swipe()
+    }">
+    <admin-panel :drawer="drawerVisible"/>
     <v-container grid-list-xl text-xs-center>
       <v-layout column warp>
         <v-card>
@@ -39,19 +41,27 @@ export default {
     return {
       name: "",
       error: null,
-      errorMessage: ""
+      errorMessage: "",
+      drawerVisible: false
     };
   },
   methods: {
     deleteCollection: async function() {
-      const res = await this.$axios.$delete(
-        "/api/delete-collection",
-        { data: { name: this.name } }
-      );
-      if (res) {
-        this.error = true;
-        this.errorMessage = res;
+      try {
+        const res = await this.$axios.$delete("/api/delete-collection", {
+          data: { name: this.name }
+        });
+        if (res) {
+          this.error = true;
+          this.errorMessage = res;
+        }
+      } catch (err) {
+        console.log(err);
+        this.$rouer.push("/");
       }
+    },
+    swipe: function() {
+      this.drawerVisible = !this.drawerVisible;
     }
   }
 };

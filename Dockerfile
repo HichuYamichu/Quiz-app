@@ -10,6 +10,7 @@ RUN yarn install
 ENV NODE_ENV production
 ENV NUXT_HOST 0.0.0.0
 ENV NUXT_PORT 3000
+ENV SECRET gnnmf.3d]4dd\oiuy[mn].zbvt06
 
 COPY . /usr/src/app
 RUN yarn build

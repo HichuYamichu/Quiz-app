@@ -1,6 +1,8 @@
 <template>
-  <div>
-    <admin-panel/>
+  <div v-touch="{
+      right: () => swipe()
+    }">
+    <admin-panel :drawer="drawerVisible"/>
     <v-container grid-list-xl text-xs-center>
       <v-card>
         <v-layout column wrap>
@@ -34,11 +36,26 @@ export default {
     AdminPanel
   },
   middleware: "auth",
-  async asyncData({ $axios }) {
-    const tokens = await $axios.$get("/api/get-tokens");
+  data() {
     return {
-      tokens: tokens
+      drawerVisible: false
     };
+  },
+  async asyncData({ $axios, redirect }) {
+    try {
+      const tokens = await $axios.$get("/api/get-tokens");
+      return {
+        tokens: tokens
+      };
+    } catch (err) {
+      console.log(err);
+      redirect("/");
+    }
+  },
+  methods: {
+    swipe: function() {
+      this.drawerVisible = !this.drawerVisible;
+    }
   }
 };
 </script>

@@ -1,6 +1,8 @@
 <template>
-  <div>
-    <admin-panel/>
+  <div v-touch="{
+      right: () => swipe()
+    }">
+    <admin-panel :drawer="drawerVisible"/>
     <v-container grid-list-xl text-xs-center>
       <v-card>
         <v-layout column wrap>
@@ -37,11 +39,20 @@ export default {
     AdminPanel
   },
   middleware: "auth",
-  async asyncData({ $axios }) {
-    const scores = await $axios.$get("/api/get-scores");
+  data() {
     return {
-      scores: scores
+      drawerVisible: false
     };
+  },
+  async asyncData({ $axios, redirect }) {
+    try {
+      const scores = await $axios.$get("/api/get-scores");
+      return {
+        scores: scores
+      };
+    } catch (err) {
+      redirect("/");
+    }
   },
   methods: {
     async remove(index) {
@@ -49,11 +60,14 @@ export default {
         await this.$axios.$delete("/api/delete-scores", {
           data: this.scores[index]
         });
-        this.scores.splice(index, 1)
+        this.scores.splice(index, 1);
       } catch (err) {
         this.errorMessage = "Could not delete that!";
         this.error = true;
       }
+    },
+    swipe: function() {
+      this.drawerVisible = !this.drawerVisible;
     }
   }
 };
