@@ -1,11 +1,10 @@
-<template>
-  <v-layout column fill-height v-touch="{
+<template v-touch="{
       right: () => swipe()
     }">
-    <v-btn fixed dark large bottom right color="red" @click="addQuestion">more questions</v-btn>
+  <v-layout column fill-height>
     <admin-panel :drawer="drawerVisible"/>
     <v-flex xs12>
-      <v-menu offset-y>
+      <v-menu offset-y full-width>
         <v-btn slot="activator" dark block large>Choose colllection to edit</v-btn>
         <v-list>
           <v-list-tile v-for="(name, index) in names" :key="index" @click="setName(index)">
@@ -16,32 +15,45 @@
     </v-flex>
     <v-flex v-for="(question, index) in questions" :key="index" my-4>
       <v-card dark elevation-15>
+        <v-btn fab absolute top right color="cyan" @click="removeQuestion(index)">
+          <v-icon>remove</v-icon>
+        </v-btn>
         <v-layout row wrap>
-          <v-flex xs12 my-2>
+          <v-flex xs12 my-4>
             <h3 class="headline">Question: {{ index + 1}}</h3>
           </v-flex>
-          <v-flex xs8 offset-xs1>
+          <v-flex xs6 offset-xs3>
             <v-text-field label="Question text" outline v-model="question.text"></v-text-field>
           </v-flex>
-          <v-flex xs6 offset-xs1 v-for="(answer, index2) in question.answers" :key="index2">
-            <v-btn absolute dark fab small bottom left color="cyan" @click="addAnswer(index)">
-              <v-icon>add</v-icon>
-            </v-btn>
-            <v-layout row>
-              <v-flex xs10>
+          <v-flex xs10 offset-xs1 v-for="(answer, index2) in question.answers" :key="index2">
+            <v-layout row wrap justify-space-between>
+              <v-flex xs4>
                 <v-text-field :label="`Answer ${index2 + 1}`" outline v-model="answer.text"></v-text-field>
               </v-flex>
-              <v-flex xs2 mx-3>
-                <v-checkbox
-                  v-model="questions[index].answers[index2].value"
-                  label="Correct"
-                  color="white"
-                ></v-checkbox>
+              <v-flex xs3>
+                <v-btn
+                  large
+                  round
+                  :color="answer.value ? 'accent' : 'secondary'"
+                  @click="changeValue(index, index2)"
+                >
+                  <v-icon v-if="answer.value">check</v-icon>
+                  <v-icon v-else>close</v-icon>
+                </v-btn>
+              </v-flex>
+              <v-flex xs3>
+                <v-btn round @click="removeAnswer(index, index2)">remove</v-btn>
+              </v-flex>
+              <v-flex xs4 v-if="index2 + 1 == question.answers.length">
+                <v-btn block large @click="addAnswer(index)">add answer</v-btn>
               </v-flex>
             </v-layout>
           </v-flex>
         </v-layout>
       </v-card>
+    </v-flex>
+    <v-flex>
+      <v-btn v-if="questions.length" large color="cyan" @click="addQuestion">add question</v-btn>
     </v-flex>
     <v-flex v-if="questions.length">
       <v-btn large @click="update">update</v-btn>
@@ -81,6 +93,16 @@ export default {
     },
     addAnswer: function(index) {
       this.questions[index].answers.push({ text: "", value: false });
+    },
+    removeAnswer: function(index, index2) {
+      this.questions[index].answers.splice(index2, 1);
+    },
+    changeValue: function(index, index2) {
+      this.questions[index].answers[index2].value = !this.questions[index]
+        .answers[index2].value;
+    },
+    removeQuestion: function(index) {
+      this.questions.splice(index, 1);
     },
     update: async function() {
       try {

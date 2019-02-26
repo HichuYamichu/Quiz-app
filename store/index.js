@@ -11,42 +11,40 @@ export const mutations = {
   SET_ADMIN(state) {
     state.admin = true;
   },
-	SET_SCORE(state, payload) {
+  SET_SCORE(state, payload) {
     state.score = {
       achived: payload.score,
       max: payload.length
-    }
+    };
   }
 };
 
 export const actions = {
   nuxtServerInit({ commit }, { req }) {
     if (req.session.user) {
-      commit("PASS", { username: req.session.user, quiz: req.session.quiz });
+      commit('PASS', req.session.user);
     }
   },
 
   async handeRequest({ commit }, payload) {
-    if (payload.charAt(0) === "\\") {
+    if (payload.charAt(0) === '\\') {
       try {
-        const responce = await this.$axios.$post(
-          "/api/login",
-          { password: payload.substr(1) }
-        );
+        const responce = await this.$axios.$post('/api/login', {
+          password: payload.substr(1)
+        });
         if (responce.admin) {
-          commit("SET_ADMIN");
+          commit('SET_ADMIN');
         }
       } catch (err) {
         console.log(err);
       }
     } else {
       try {
-        const responce = await this.$axios.$post(
-          "/api/authenticate-user",
-          { token: payload }
-        );
-        commit("PASS", responce);
-        this.$router.push("/quiz");
+        const responce = await this.$axios.$post('/api/authenticate-user', {
+          token: payload
+        });
+        commit('PASS', responce);
+        this.$router.push('/quiz');
       } catch (err) {
         console.log(err);
       }

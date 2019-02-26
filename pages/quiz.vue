@@ -1,17 +1,15 @@
 <template>
-  <v-card>
-    <v-layout column>
-      <v-flex align-self-center pa-1>
-        <h1 class="headline">{{questions[questionNR].text}}</h1>
-      </v-flex>
-      <v-flex v-for="(answer, index) in questions[questionNR].answers" :key="index" pa-2>
-        <v-btn block @click="setAnswer(index)" :light="answer.value" large>{{ answer.text }}</v-btn>
-      </v-flex>
-      <v-flex align-self-center>
-        <v-btn @click="nextQuestion" color="cyan">send answers</v-btn>
-      </v-flex>
-    </v-layout>
-  </v-card>
+  <v-layout column>
+    <h1 class="display-1 mb-5 mt-2">{{questions[questionNR].text}}</h1>
+    <v-flex my-1 v-for="(answer, index) in questions[questionNR].answers" :key="index">
+      <v-card hover :light="answer.value" @click="setAnswer(index)">
+        <v-card-text class="subheading pa-4">{{ answer.text }}</v-card-text>
+      </v-card>
+    </v-flex>
+    <v-flex xs6>
+      <v-btn large @click="nextQuestion" color="cyan">NEXT</v-btn>
+    </v-flex>
+  </v-layout>
 </template>
 
 <script>
@@ -47,11 +45,11 @@ export default {
       }
     },
     sendAnswers: async function() {
-      const res = await this.$axios.$post(
-        "/api/send-answers",
-        { answers: this.answers, user: this.$store.state.user}
-      );
-      this.$store.commit('SET_SCORE', res)
+      const res = await this.$axios.$post("/api/send-answers", {
+        answers: this.answers,
+        user: this.$store.state.user
+      });
+      this.$store.commit("SET_SCORE", res);
       this.$router.push({
         path: "/score"
       });

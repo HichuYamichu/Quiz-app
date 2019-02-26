@@ -1,32 +1,22 @@
-<template>
-  <div v-touch="{
+<template v-touch="{
       right: () => swipe()
     }">
-    <admin-panel :drawer="drawerVisible"/>
-    <v-container grid-list-xl text-xs-center>
-      <v-layout column warp>
-        <v-card>
-          <v-flex align-self-center xs12>
-            <h1 class="headline">Delete collection</h1>
-          </v-flex>
-          <v-flex xs12>
-            <v-layout row warp>
-              <v-flex xs8 offset-xs1>
-                <v-text-field label="Collection name" outline v-model="name"></v-text-field>
-              </v-flex>
-              <v-flex xs2>
-                <v-btn block large @click="deleteCollection">Delete</v-btn>
-              </v-flex>
-            </v-layout>
-          </v-flex>
-        </v-card>
-      </v-layout>
-    </v-container>
+  <v-layout column fill-height align-content-space-around>
+    <v-card>
+      <h1 class="headline pa-3">Delete collection</h1>
+      <v-flex xs8 offset-xs2>
+        <v-text-field label="Collection name" outline v-model="name"></v-text-field>
+      </v-flex>
+      <v-flex xs2 offset-xs5 mb-3>
+        <v-btn block large @click="deleteCollection">Delete</v-btn>
+      </v-flex>
+    </v-card>
     <v-snackbar v-model="error" :timeout="5000" :top="true">
       {{ errorMessage }}
       <v-btn color="pink" flat @click="error = false">Close</v-btn>
     </v-snackbar>
-  </div>
+    <admin-panel :drawer="drawerVisible"/>
+  </v-layout>
 </template>
 
 <script>
