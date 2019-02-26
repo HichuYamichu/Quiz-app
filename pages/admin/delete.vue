@@ -7,8 +7,8 @@
       <v-flex xs8 offset-xs2>
         <v-text-field label="Collection name" outline v-model="name"></v-text-field>
       </v-flex>
-      <v-flex xs2 offset-xs5 mb-3>
-        <v-btn block large @click="deleteCollection">Delete</v-btn>
+      <v-flex xs12 mb-3>
+        <v-btn large @click="deleteCollection">Delete</v-btn>
       </v-flex>
     </v-card>
     <v-snackbar v-model="error" :timeout="5000" :top="true">

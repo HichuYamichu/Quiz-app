@@ -1,6 +1,11 @@
 <template>
   <v-layout>
     <v-flex>
+      <v-toolbar app>
+        <v-btn flat @click="open">
+          <v-icon>menu</v-icon>
+        </v-btn>
+      </v-toolbar>
       <v-navigation-drawer temporary v-if="$device.isMobile" v-model="drawerOn" absolute>
         <v-toolbar flat class="transparent">
           <v-list>
@@ -37,6 +42,11 @@ export default {
     return {
       drawerOn: false
     };
+  },
+  methods: {
+    open: function() {
+      this.drawerOn = !this.drawerOn;
+    }
   }
 };
 </script>

@@ -1,9 +1,9 @@
 const db = require('./index');
 const ObjectID = require('mongodb').ObjectID;
 const shortid = require('shortid');
-shortid.characters(
-  '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ$@'
-);
+// shortid.characters(
+//   '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ$@'
+// );
 
 module.exports = {
   async createCollection(collName, questions) {

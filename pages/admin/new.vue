@@ -3,10 +3,10 @@
     }">
   <v-layout column fill-height>
     <admin-panel :drawer="drawerVisible"/>
-    <v-flex align-self-center>
+    <v-flex>
       <h1 class="headline my-2">Create new collection</h1>
     </v-flex>
-    <v-flex align-self-center>
+    <v-flex>
       <v-text-field label="collection name" v-model="collectionName" outline></v-text-field>
     </v-flex>
     <v-flex v-for="(question, index) in questions" :key="index" my-4>
@@ -25,7 +25,6 @@
               </v-flex>
               <v-flex xs3>
                 <v-btn
-                  large
                   round
                   :color="answer.value ? 'accent' : 'secondary'"
                   @click="changeValue(index, index2)"

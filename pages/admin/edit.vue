@@ -15,12 +15,12 @@
     </v-flex>
     <v-flex v-for="(question, index) in questions" :key="index" my-4>
       <v-card dark elevation-15>
-        <v-btn fab absolute top right color="cyan" @click="removeQuestion(index)">
+        <v-btn fab small absolute top right color="cyan" @click="removeQuestion(index)">
           <v-icon>remove</v-icon>
         </v-btn>
         <v-layout row wrap>
           <v-flex xs12 my-4>
-            <h3 class="headline">Question: {{ index + 1}}</h3>
+            <h3 class="headline">Question: {{ index + 1 }}</h3>
           </v-flex>
           <v-flex xs6 offset-xs3>
             <v-text-field label="Question text" outline v-model="question.text"></v-text-field>
@@ -32,7 +32,6 @@
               </v-flex>
               <v-flex xs3>
                 <v-btn
-                  large
                   round
                   :color="answer.value ? 'accent' : 'secondary'"
                   @click="changeValue(index, index2)"

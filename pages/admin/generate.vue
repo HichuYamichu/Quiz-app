@@ -1,31 +1,25 @@
 <template v-touch="{
       right: () => swipe()
     }">
-  <v-layout column fill-height>
-    <v-card>
-      <v-flex align-self-center xs12>
-        <h1 class="headline py-3">Generate token for user</h1>
-      </v-flex>
-      <v-flex xs12 mb-4>
-        <v-menu offset-y>
-          <v-btn slot="activator" dark block large>Choose quiz to generate user token for</v-btn>
-          <v-list>
-            <v-list-tile v-for="(name, index) in names" :key="index" @click="setName(index)">
-              <v-list-tile-title>{{ name }}</v-list-tile-title>
-            </v-list-tile>
-          </v-list>
-        </v-menu>
-      </v-flex>
-      <v-flex>
-        <h1 class="headline">{{ quizName }}</h1>
-      </v-flex>
-      <v-flex xs8 offset-xs2>
-        <v-text-field label="user name" v-model="userName" outline v-on:keyup.enter="generate"></v-text-field>
-      </v-flex>
-      <v-flex pb-3>
-        <v-btn @click="generate">Generate</v-btn>
-      </v-flex>
-    </v-card>
+  <v-layout align-space-around justify-start column fill-heigh>
+    <admin-panel :drawer="drawerVisible"/>
+    <v-flex xs12>
+      <v-menu offset-y full-width>
+        <v-btn slot="activator" dark block large>Choose quiz</v-btn>
+        <v-list>
+          <v-list-tile v-for="(name, index) in names" :key="index" @click="setName(index)">
+            <v-list-tile-title>{{ name }}</v-list-tile-title>
+          </v-list-tile>
+        </v-list>
+      </v-menu>
+      <v-card>
+        <v-card-text>
+          <h1 class="display1 mb-4">{{ quizName }}</h1>
+          <v-text-field label="user name" v-model="userName" outline v-on:keyup.enter="generate"></v-text-field>
+        </v-card-text>
+        <v-btn large @click="generate">Generate</v-btn>
+      </v-card>
+    </v-flex>
     <v-snackbar v-model="error" :timeout="5000" :top="true">
       {{ errorMessage }}
       <v-btn color="pink" flat @click="error = false">Close</v-btn>
@@ -39,7 +33,6 @@
         </v-card-actions>
       </v-card>
     </v-dialog>
-    <admin-panel :drawer="drawerVisible"/>
   </v-layout>
 </template>
 
