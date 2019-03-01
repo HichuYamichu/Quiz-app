@@ -1,22 +1,21 @@
-# quiz
-
-> My grand Nuxt.js project
+# Quiz-app
 
 ## Build Setup
 
 ``` bash
-# install dependencies
+# with Docker (recommended)
+$ docker-compose up
+
+# or build locally
 $ yarn install
-
-# serve with hot reload at localhost:3000
-$ yarn run dev
-
-# build for production and launch server
 $ yarn run build
+# make sure you have MongoDB running first and URI string in ./server/database/index.js points to localhost
 $ yarn start
 
-# generate static project
-$ yarn run generate
 ```
+# TODO
+> per question timer
+
+> handling image upload
 
 For detailed explanation on how things work, checkout [Nuxt.js docs](https://nuxtjs.org).

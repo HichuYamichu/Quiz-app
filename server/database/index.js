@@ -3,8 +3,8 @@ let _mainDB;
 
 async function connect() {
 	const MongoClient = require('mongodb').MongoClient;
-  const url = 'mongodb://localhost:27017';
-  const client = await MongoClient.connect(url, { useNewUrlParser: true });
+  const URI = 'mongodb://mongo:27017';
+  const client = await MongoClient.connect(URI, { useNewUrlParser: true });
 	_mainDB = client.db('quizCollections');
 	const configurationDB = await client.db('quiz');
 	_configDB = configurationDB;
