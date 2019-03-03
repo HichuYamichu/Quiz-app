@@ -10,6 +10,7 @@ RUN yarn install
 ENV NODE_ENV production
 ENV NUXT_HOST 0.0.0.0
 ENV NUXT_PORT 3000
+ENV MONGO mongodb://mongo:27017
 
 COPY . /usr/src/app
 RUN yarn build

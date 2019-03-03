@@ -3,7 +3,7 @@ let _mainDB;
 
 async function connect() {
 	const MongoClient = require('mongodb').MongoClient;
-  const URI = 'mongodb://localhost:27017';
+  const URI = process.env.MONGO || 'mongodb://localhost:27017';
   const client = await MongoClient.connect(URI, { useNewUrlParser: true });
 	_mainDB = client.db('quizCollections');
 	const configurationDB = await client.db('quiz');
