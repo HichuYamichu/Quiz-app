@@ -14,8 +14,8 @@ $ yarn start
 
 ```
 # TODO
-> per question timer
+> ~~.handling image upload~~. DONE
 
-> handling image upload
+> per question timer
 
 For detailed explanation on how things work, checkout [Nuxt.js docs](https://nuxtjs.org).
