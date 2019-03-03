@@ -83,7 +83,6 @@ export default {
     return {
       collectionName: "",
       questions: [],
-			images: [],
       drawerVisible: false
     };
   },
@@ -115,24 +114,26 @@ export default {
     removeQuestion: function(index) {
       this.questions.splice(index, 1);
     },
-    handleFileUpload: function(index) {
-			this.questions[index].img = this.$refs[`image${index}`][0].files[0].name
-      this.images.push(this.$refs[`image${index}`][0].files[0]);
+    handleFileUpload: async function(index) {
+      const reader = new FileReader();
+      reader.readAsDataURL(this.$refs[`image${index}`][0].files[0]);
+      reader.onload = () => {
+				this.questions[index].img = reader.result
+			};
+      reader.onerror = function(error) {
+        console.log("Error: ", error);
+      };
     },
     update: async function() {
       try {
-        let formData = new FormData();
-        for (var i = 0; i < this.images.length; i++) {
-          let image = this.images[i];
-          formData.append(`files[${i}]`, image);
-        }
-        const questions = JSON.stringify(this.questions);
-        formData.append("name", this.collectionName);
-        formData.append("questions", questions);
-        this.$axios.$post("/api/update-collection", formData);
+        this.$axios.$post("/api/update-collection", {
+          name: this.collectionName,
+          questions: this.questions
+        });
         this.collectionName = "";
-        this.questions = [{ text: "", answers: [{ text: "", value: false }] }];
-        this.images = [];
+        this.questions = [
+          { text: "", img: "", answers: [{ text: "", value: false }] }
+        ];
       } catch (err) {
         console.log(err);
       }

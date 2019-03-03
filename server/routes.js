@@ -85,15 +85,7 @@ module.exports = (app) => {
 	app.post('/api/update-collection', async (req, res) => {
 		if (req.session.admin) {
 			try {
-				const questions = JSON.parse(req.body.questions);
-				if (req.files) {
-					Object.keys(req.files).forEach(file => {
-						fs.writeFile(`./static/images/${req.files[file].name}`, req.files[file].data, err => {
-							if (err) throw err;
-						})
-					})
-				}
-				await collections.editCollections(req.body.name, questions);
+				await collections.editCollections(req.body.name, req.body.questions);
 				res.sendStatus(200);
 			} catch (err) {
 				console.log(err);
