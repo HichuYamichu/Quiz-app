@@ -11,6 +11,17 @@
     </v-flex>
     <v-flex v-for="(question, index) in questions" :key="index" my-4>
       <v-card dark elevation-15>
+        <div>
+          <label>
+            File
+            <input
+              type="file"
+              id="file"
+              :ref="`image${index}`"
+              @change="handleFileUpload(`image${index}`)"
+            >
+          </label>
+        </div>
         <v-layout row wrap>
           <v-flex xs12 my-4>
             <h3 class="headline">Question: {{ index + 1}}</h3>
@@ -69,6 +80,7 @@ export default {
     return {
       collectionName: "",
       questions: [{ text: "", answers: [{ text: "", value: false }] }],
+      images: [],
       error: null,
       errorMessage: "",
       drawerVisible: true
@@ -88,16 +100,25 @@ export default {
       this.questions[index].answers[index2].value = !this.questions[index]
         .answers[index2].value;
     },
+    handleFileUpload: function(index) {
+      this.images.push(this.$refs[index][0].files[0]);
+    },
     create: function() {
       if (this.collectionName && !this.collectionName.includes(".")) {
-        this.$axios.$post("/api/new-collection", {
-          name: this.collectionName,
-          questions: this.questions
-        });
-        (this.collectionName = ""),
-          (this.questions = [
+        let formData = new FormData();
+        for (var i = 0; i < this.images.length; i++) {
+          let image = this.images[i];
+          formData.append(`files[${i}]`, image);
+        }
+        const questions = JSON.stringify(this.questions);
+        formData.append("name", this.collectionName);
+        formData.append("questions", questions);
+        this.$axios.$post("/api/upload", formData);
+        this.collectionName = ""
+          this.questions = [
             { text: "", answers: [{ text: "", value: false }] }
-          ]);
+          ]
+				this.images = []
       } else {
         this.error = true;
         this.errorMessage = "Collection name must not be empty or contain .";
