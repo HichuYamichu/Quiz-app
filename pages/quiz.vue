@@ -1,12 +1,17 @@
 <template>
-  <v-layout column>
-    <h1 class="display-1 mb-5 mt-2">{{questions[questionNR].text}}</h1>
-    <v-flex my-1 v-for="(answer, index) in questions[questionNR].answers" :key="index">
+  <v-layout row wrap justify-center>
+    <v-flex xs12>
+      <h1 class="display-1 mb-3">{{questions[questionNR].text}}</h1>
+    </v-flex>
+    <v-flex xs6 md2 v-if="questions[questionNR].img">
+      <v-img :src="questions[questionNR].img" min-width="100%"></v-img>
+    </v-flex>
+    <v-flex xs12 my-4 v-for="(answer, index) in questions[questionNR].answers" :key="index">
       <v-card hover :light="answer.value" @click="setAnswer(index)">
         <v-card-text class="subheading pa-4">{{ answer.text }}</v-card-text>
       </v-card>
     </v-flex>
-    <v-flex xs6>
+    <v-flex xs12>
       <v-btn large @click="nextQuestion" color="cyan">NEXT</v-btn>
     </v-flex>
   </v-layout>
@@ -14,6 +19,7 @@
 
 <script>
 export default {
+  layout: "quiz",
   middleware: "checkName",
   data() {
     return {

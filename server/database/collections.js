@@ -1,9 +1,6 @@
 const db = require('./index');
 const ObjectID = require('mongodb').ObjectID;
 const shortid = require('shortid');
-// shortid.characters(
-//   '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ$@'
-// );
 
 module.exports = {
   async createCollection(collName, questions) {
@@ -34,7 +31,7 @@ module.exports = {
     questions.forEach(question => {
       coll.updateOne(
         { _id: new ObjectID(question._id) },
-        { $set: { text: question.text, answers: question.answers } },
+        { $set: { text: question.text, img: question.img, answers: question.answers } },
         { upsert: true }
       );
     });

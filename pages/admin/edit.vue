@@ -15,6 +15,17 @@
     </v-flex>
     <v-flex v-for="(question, index) in questions" :key="index" my-4>
       <v-card dark elevation-15>
+        <div>
+          <label>
+            File
+            <input
+              type="file"
+              id="file"
+              :ref="`image${index}`"
+              @change="handleFileUpload(index)"
+            >
+          </label>
+        </div>
         <v-btn fab small absolute top right color="cyan" @click="removeQuestion(index)">
           <v-icon>remove</v-icon>
         </v-btn>
@@ -72,6 +83,7 @@ export default {
     return {
       collectionName: "",
       questions: [],
+			images: [],
       drawerVisible: false
     };
   },
@@ -103,15 +115,26 @@ export default {
     removeQuestion: function(index) {
       this.questions.splice(index, 1);
     },
+    handleFileUpload: function(index) {
+			this.questions[index].img = this.$refs[`image${index}`][0].files[0].name
+      this.images.push(this.$refs[`image${index}`][0].files[0]);
+    },
     update: async function() {
       try {
-        await this.$axios.$post("/api/update-collection", {
-          name: this.collectionName,
-          questions: this.questions
-        });
+        let formData = new FormData();
+        for (var i = 0; i < this.images.length; i++) {
+          let image = this.images[i];
+          formData.append(`files[${i}]`, image);
+        }
+        const questions = JSON.stringify(this.questions);
+        formData.append("name", this.collectionName);
+        formData.append("questions", questions);
+        this.$axios.$post("/api/update-collection", formData);
+        this.collectionName = "";
+        this.questions = [{ text: "", answers: [{ text: "", value: false }] }];
+        this.images = [];
       } catch (err) {
         console.log(err);
-        this.$router.push("/");
       }
     },
     find: async function() {

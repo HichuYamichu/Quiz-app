@@ -7927,11 +7927,6 @@ uuid@^3.3.2:
   resolved "https://registry.yarnpkg.com/uuid/-/uuid-3.3.2.tgz#1b4af4955eb3077c501c23872fc6513811587131"
   integrity sha512-yXJmeNaw3DnnKAOKJE51sL/ZaYfWJRl1pK9dr19YFCu0ObS231AB1/LbqTKRAQ5kw8A90rA6fr4riOUpTZvQZA==
 
-v-file-upload@^3.1.7:
-  version "3.1.7"
-  resolved "https://registry.yarnpkg.com/v-file-upload/-/v-file-upload-3.1.7.tgz#8a8add0fe278cf24a3990b5a4c7c51deb1de107f"
-  integrity sha512-ce+LVMB6NnA+qv0MsCQXpMHy8VnZ+EjzPcSKXGYWXPxKf/qYVGns+AxAw3fUZVuYRGmrSp7YQ7XEOGkZuGMugA==
-
 vary@~1.1.2:
   version "1.1.2"
   resolved "https://registry.yarnpkg.com/vary/-/vary-1.1.2.tgz#2299f02c6ded30d4a5961b0b9f74524a18f634fc"
