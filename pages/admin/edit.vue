@@ -15,16 +15,17 @@
     </v-flex>
     <v-flex v-for="(question, index) in questions" :key="index" my-4>
       <v-card dark elevation-15>
-        <div>
+        <div class="pt-3">
           <label>
-            File
+            <i class="material-icons">file_upload</i>
             <input
+              v-show="false"
               type="file"
-              id="file"
               :ref="`image${index}`"
               @change="handleFileUpload(index)"
             >
           </label>
+          <h5>{{ fileName[index] }}</h5>
         </div>
         <v-btn fab small absolute top right color="cyan" @click="removeQuestion(index)">
           <v-icon>remove</v-icon>
@@ -118,8 +119,8 @@ export default {
       const reader = new FileReader();
       reader.readAsDataURL(this.$refs[`image${index}`][0].files[0]);
       reader.onload = () => {
-				this.questions[index].img = reader.result
-			};
+        this.questions[index].img = reader.result;
+      };
       reader.onerror = function(error) {
         console.log("Error: ", error);
       };
