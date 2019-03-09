@@ -42,7 +42,7 @@ export default {
   },
   async asyncData({ $axios, redirect }) {
     try {
-      const scores = await $axios.$get("/api/get-scores");
+      const scores = await $axios.$get("/api/admin/get-scores");
       return {
         scores: scores
       };
@@ -53,7 +53,7 @@ export default {
   methods: {
     async remove(index) {
       try {
-        await this.$axios.$delete("/api/delete-scores", {
+        await this.$axios.$delete("/api/admin/delete-scores", {
           data: this.scores[index]
         });
         this.scores.splice(index, 1);

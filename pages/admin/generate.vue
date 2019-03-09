@@ -58,7 +58,7 @@ export default {
   },
   async asyncData({ $axios, redirect }) {
     try {
-      const res = await $axios.$get("/api/fetch-collection-names");
+      const res = await $axios.$get("/api/admin/fetch-collection-names");
       return {
         names: res
       };

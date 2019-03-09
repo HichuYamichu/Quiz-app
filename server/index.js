@@ -24,7 +24,8 @@ app.use(
 	})
 );
 
-require('./routes')(app);
+app.use('/api', require('./routes/index'));
+app.use('/api/admin', require('./routes/admin'));
 
 process.on('unhandledRejection', (reason, p) => {
 	console.log('Unhandled Rejection at:', p, 'reason:', reason);

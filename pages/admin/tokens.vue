@@ -39,7 +39,7 @@ export default {
   },
   async asyncData({ $axios, redirect }) {
     try {
-      const tokens = await $axios.$get("/api/get-tokens");
+      const tokens = await $axios.$get("/api/admin/get-tokens");
       return {
         tokens: tokens
       };

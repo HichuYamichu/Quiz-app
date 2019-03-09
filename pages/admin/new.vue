@@ -117,7 +117,7 @@ export default {
     },
     create: function() {
       if (this.collectionName && !this.collectionName.includes(".")) {
-        this.$axios.$post("/api/new-collection", {
+        this.$axios.$post("/api/admin/new-collection", {
           name: this.collectionName,
           questions: this.questions
         });
