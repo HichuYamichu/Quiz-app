@@ -19,4 +19,5 @@ $ yarn start
 > per question timer
 
 In order to login to admin panel enter \ followed by password (defined in ENV or default Qwerty123) in the TOKEN field
+
 For detailed explanation on how things work, checkout [Nuxt.js docs](https://nuxtjs.org).
