@@ -24,6 +24,9 @@ export const actions = {
     if (req.session.user) {
       commit('PASS', req.session.user);
     }
+		if (req.session.admin) {
+      commit('SET_ADMIN');
+    }
   },
 
   async handeRequest({ commit }, payload) {

@@ -89,7 +89,7 @@ export default {
   },
   async asyncData({ $axios, redirect }) {
     try {
-      const res = await $axios.$get("/api/admin/fetch-collection-names");
+      const res = await $axios.$get("/api/fetch-collection-names");
       return {
         names: res
       };
@@ -127,7 +127,7 @@ export default {
     },
     update: async function() {
       try {
-        this.$axios.$post("/api/admin/update-collection", {
+        this.$axios.$post("/api/update-collection", {
           name: this.collectionName,
           questions: this.questions
         });

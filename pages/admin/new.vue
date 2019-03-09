@@ -11,18 +11,7 @@
     </v-flex>
     <v-flex v-for="(question, index) in questions" :key="index" my-4>
       <v-card dark elevation-15>
-        <div class="pt-3">
-          <label>
-            <i class="material-icons">file_upload</i>
-            <input
-              v-show="false"
-              type="file"
-              :ref="`image${index}`"
-              @change="handleFileUpload(index)"
-            >
-          </label>
-          <h5>{{ fileName[index] }}</h5>
-        </div>
+        <file-input :index="index" @fileChanged="handleFileUpload" ></file-input>
         <v-layout row wrap>
           <v-flex xs12 my-4>
             <h3 class="headline">Question: {{ index + 1 }}</h3>
@@ -71,10 +60,12 @@
 
 <script>
 import AdminPanel from "@/components/AdminPanel";
+import FileInput from "@/components/FileInput";
 
 export default {
   components: {
-    AdminPanel
+    AdminPanel,
+		FileInput
   },
   middleware: "auth",
   data() {
@@ -104,16 +95,9 @@ export default {
       this.questions[index].answers[index2].value = !this.questions[index]
         .answers[index2].value;
     },
-    handleFileUpload: async function(index) {
-      this.fileName[index] = this.$refs[`image${index}`][0].files[0].name;
-      const reader = new FileReader();
-      reader.readAsDataURL(this.$refs[`image${index}`][0].files[0]);
-      reader.onload = () => {
-        this.questions[index].img = reader.result;
-      };
-      reader.onerror = function(error) {
-        console.log("Error: ", error);
-      };
+    handleFileUpload: async function(file, index) {
+			console.log(file, index)
+      this.questions[index].img = file;
     },
     create: function() {
       if (this.collectionName && !this.collectionName.includes(".")) {
