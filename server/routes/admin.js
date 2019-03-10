@@ -30,6 +30,15 @@ router.get('/fetch-collection-names', async (req, res) => {
 	}
 });
 
+router.get('/fetch-collection', async (req, res) => {
+	try {
+		const questions = await collections.fetchCollection(req.query.name);
+		res.send(questions);
+	} catch (err) {
+		res.sendStatus(404);
+	}
+});
+
 router.post('/update-collection', async (req, res) => {
 	if (req.session.admin) {
 		try {
@@ -55,6 +64,14 @@ router.delete('/delete-collection', async (req, res) => {
 	} else {
 		res.sendStatus(401);
 	}
+});
+
+router.post('/generate-token', async (req, res) => {
+	const token = await collections.generate(
+		req.body.quizName,
+		req.body.userName
+	);
+	res.send({ token: token });
 });
 
 router.get('/get-tokens', async (req, res) => {

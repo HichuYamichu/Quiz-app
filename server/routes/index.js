@@ -59,21 +59,4 @@ router.post('/send-answers', async (req, res) => {
 	}
 });
 
-router.get('/fetch-collection', async (req, res) => {
-	try {
-		const questions = await collections.fetchCollection(req.query.name);
-		res.send(questions);
-	} catch (err) {
-		res.sendStatus(404);
-	}
-});
-
-router.post('/generate-token', async (req, res) => {
-	const token = await collections.generate(
-		req.body.quizName,
-		req.body.userName
-	);
-	res.send({ token: token });
-});
-
 module.exports = router;

@@ -70,7 +70,7 @@ export default {
     generate: async function() {
       try {
         if (this.userName && this.quizName) {
-          const responce = await this.$axios.$post("/api/generate-token", {
+          const responce = await this.$axios.$post("/api/admin/generate-token", {
             quizName: this.quizName,
             userName: this.userName
           });

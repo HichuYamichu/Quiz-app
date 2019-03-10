@@ -94,7 +94,7 @@ export default {
   },
   methods: {
     addQuestion: function() {
-      this.questions.push({ text: "", answers: [{ text: "", value: false }] });
+      this.questions.push({ text: "", img: null, time: 60, answers: [{ text: "", value: false }] });
     },
     addAnswer: function(index) {
       this.questions[index].answers.push({ text: "", value: false });
@@ -109,18 +109,18 @@ export default {
     removeQuestion: function(index) {
       this.questions.splice(index, 1);
     },
-    handleFileUpload: async function(index) {
+    handleFileUpload: async function(file, index) {
       this.questions[index].img = file;
     },
     update: async function() {
       try {
-        this.$axios.$post("/api/update-collection", {
+        this.$axios.$post("/api/admin/update-collection", {
           name: this.collectionName,
           questions: this.questions
         });
         this.collectionName = "";
         this.questions = [
-          { text: "", img: "", answers: [{ text: "", value: false }] }
+          { text: "", img: null, time: 60, answers: [{ text: "", value: false }] }
         ];
       } catch (err) {
         console.log(err);
@@ -128,7 +128,7 @@ export default {
     },
     find: async function() {
       const res = await this.$axios.$get(
-        `/api/fetch-collection?name=${this.collectionName}`
+        `/api/admin/fetch-collection?name=${this.collectionName}`
       );
       this.questions = [];
       res.forEach(question => {

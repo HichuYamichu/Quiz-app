@@ -77,8 +77,6 @@ export default {
       questions: [
         { text: "", img: null, time: 60, answers: [{ text: "", value: false }] }
       ],
-      images: [],
-      fileName: [],
       error: null,
       errorMessage: "",
       drawerVisible: true
@@ -86,7 +84,7 @@ export default {
   },
   methods: {
     addQuestion: function() {
-      this.questions.push({ text: "", answers: [{ text: "", value: false }] });
+      this.questions.push({ text: "", img: null, time: 60, answers: [{ text: "", value: false }] });
     },
     addAnswer: function(index) {
       this.questions[index].answers.push({ text: "", value: false });

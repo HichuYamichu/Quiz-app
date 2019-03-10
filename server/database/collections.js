@@ -31,7 +31,7 @@ module.exports = {
     questions.forEach(question => {
       coll.updateOne(
         { _id: new ObjectID(question._id) },
-        { $set: { text: question.text, img: question.img, answers: question.answers } },
+        { $set: { text: question.text, img: question.img, time: question.time, answers: question.answers } },
         { upsert: true }
       );
     });
