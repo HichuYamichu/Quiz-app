@@ -11,6 +11,20 @@ router.post('/login', (req, res) => {
 	}
 });
 
+router.post('/authenticate-user', async (req, res) => {
+	try {
+		const user = await collections.authenticateUser(req.body.token);
+		req.session.user = {
+			userName: user.username,
+			token: user.token,
+			quiz: user.quiz
+		};
+		res.send({ userName: user.username, token: user.token, quiz: user.quiz });
+	} catch (err) {
+		res.sendStatus(404);
+	}
+});
+
 router.get('/questions', async (req, res) => {
 	if (req.query.name) {
 		try {
@@ -60,20 +74,6 @@ router.post('/generate-token', async (req, res) => {
 		req.body.userName
 	);
 	res.send({ token: token });
-});
-
-router.post('/authenticate-user', async (req, res) => {
-	try {
-		const user = await collections.authenticateUser(req.body.token);
-		req.session.user = {
-			userName: user.username,
-			token: user.token,
-			quiz: user.quiz
-		};
-		res.send({ userName: user.username, token: user.token, quiz: user.quiz });
-	} catch (err) {
-		res.sendStatus(404);
-	}
 });
 
 module.exports = router;

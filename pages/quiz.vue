@@ -1,7 +1,14 @@
 <template>
   <v-layout row wrap justify-center>
-    <v-flex xs12>
+    <v-flex xs12 class="mb-3">
       <h1 class="display-1 mb-3">{{questions[questionNR].text}}</h1>
+      <v-progress-circular
+        :rotate="360"
+        :size="85"
+        :width="10"
+        :value="proggres"
+        color="cyan"
+      >{{ time }}</v-progress-circular>
     </v-flex>
     <v-flex xs6 md2 v-if="questions[questionNR].img">
       <v-img :src="questions[questionNR].img" min-width="100%"></v-img>
@@ -24,7 +31,9 @@ export default {
   data() {
     return {
       questionNR: 0,
-      answers: []
+      answers: [],
+      time: null,
+      proggres: 100
     };
   },
   async asyncData({ $axios, store }) {
@@ -35,19 +44,35 @@ export default {
       questions: Questions
     };
   },
+  mounted: function() {
+    this.time = this.questions[this.questionNR].time;
+    const self = this;
+    setInterval(function() {
+      self.time--;
+      self.proggres = (
+        (self.time / self.questions[self.questionNR].time) *
+        100
+      ).toFixed(0);
+      if (self.time === 0) {
+        self.proggres = 100;
+        self.nextQuestion();
+      }
+    }, 1000);
+  },
   methods: {
     setAnswer: function(id) {
       this.questions[this.questionNR].answers[id].value = !this.questions[
         this.questionNR
       ].answers[id].value;
     },
-    nextQuestion: function(id) {
+    nextQuestion: function() {
       if (this.questionNR + 1 === this.questions.length) {
         this.answers.push(this.questions[this.questionNR].answers);
         this.sendAnswers();
       } else {
         this.answers.push(this.questions[this.questionNR].answers);
         this.questionNR++;
+        this.time = this.questions[this.questionNR].time;
       }
     },
     sendAnswers: async function() {
@@ -64,5 +89,6 @@ export default {
 };
 </script>
 
-<style>
+<style scoped>
+
 </style>

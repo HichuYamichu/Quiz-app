@@ -19,13 +19,13 @@ app.use(
 		rolling: true,
 		saveUninitialized: false,
 		cookie: {
-			maxAge: 1000 * 60 * 5
+			maxAge: 1000 * 60 * 60
 		}
 	})
 );
 
-app.use('/api', require('./routes/index'));
-app.use('/api/admin', require('./routes/admin'));
+app.use('/api', require('./routes/index.js'));
+app.use('/api/admin', require('./routes/admin.js'));
 
 process.on('unhandledRejection', (reason, p) => {
 	console.log('Unhandled Rejection at:', p, 'reason:', reason);

@@ -14,9 +14,9 @@ $ yarn start
 
 ```
 # TODO
-> ~~.handling image upload~~. DONE
+> ~~handling image upload~~ DONE
 
-> per question timer
+> ~~per question timer~~ DONE
 
 In order to login to admin panel enter \ followed by password (defined in ENV or default Qwerty123) in the TOKEN field
 

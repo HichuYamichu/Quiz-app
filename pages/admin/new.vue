@@ -10,14 +10,17 @@
       <v-text-field label="collection name" v-model="collectionName" outline></v-text-field>
     </v-flex>
     <v-flex v-for="(question, index) in questions" :key="index" my-4>
-      <v-card dark elevation-15>
+      <v-card dark elevation-15 class="pb-3">
         <file-input :index="index" @fileChanged="handleFileUpload" ></file-input>
         <v-layout row wrap>
           <v-flex xs12 my-4>
             <h3 class="headline">Question: {{ index + 1 }}</h3>
           </v-flex>
-          <v-flex xs6 offset-xs3>
+          <v-flex xs6 offset-xs2>
             <v-text-field label="Question text" outline v-model="question.text"></v-text-field>
+          </v-flex>
+					<v-flex xs2>
+            <v-text-field label="time" outline v-model="question.time"></v-text-field>
           </v-flex>
           <v-flex xs10 offset-xs1 v-for="(answer, index2) in question.answers" :key="index2">
             <v-layout row wrap justify-space-between>
@@ -72,7 +75,7 @@ export default {
     return {
       collectionName: "",
       questions: [
-        { text: "", img: null, answers: [{ text: "", value: false }] }
+        { text: "", img: null, time: 60, answers: [{ text: "", value: false }] }
       ],
       images: [],
       fileName: [],
@@ -96,7 +99,6 @@ export default {
         .answers[index2].value;
     },
     handleFileUpload: async function(file, index) {
-			console.log(file, index)
       this.questions[index].img = file;
     },
     create: function() {

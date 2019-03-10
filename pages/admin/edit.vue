@@ -14,19 +14,8 @@
       </v-menu>
     </v-flex>
     <v-flex v-for="(question, index) in questions" :key="index" my-4>
-      <v-card dark elevation-15>
-        <div class="pt-3">
-          <label>
-            <i class="material-icons">file_upload</i>
-            <input
-              v-show="false"
-              type="file"
-              :ref="`image${index}`"
-              @change="handleFileUpload(index)"
-            >
-          </label>
-          <h5>{{ fileName[index] }}</h5>
-        </div>
+      <v-card dark elevation-15 class="pb-3">
+        <file-input :index="index" @fileChanged="handleFileUpload"></file-input>
         <v-btn fab small absolute top right color="cyan" @click="removeQuestion(index)">
           <v-icon>remove</v-icon>
         </v-btn>
@@ -34,8 +23,11 @@
           <v-flex xs12 my-4>
             <h3 class="headline">Question: {{ index + 1 }}</h3>
           </v-flex>
-          <v-flex xs6 offset-xs3>
+          <v-flex xs6 offset-xs2>
             <v-text-field label="Question text" outline v-model="question.text"></v-text-field>
+          </v-flex>
+					<v-flex xs2>
+            <v-text-field label="time" outline v-model="question.time"></v-text-field>
           </v-flex>
           <v-flex xs10 offset-xs1 v-for="(answer, index2) in question.answers" :key="index2">
             <v-layout row wrap justify-space-between>
@@ -74,10 +66,12 @@
 
 <script>
 import AdminPanel from "@/components/AdminPanel";
+import FileInput from "@/components/FileInput";
 
 export default {
   components: {
-    AdminPanel
+    AdminPanel,
+		FileInput
   },
   middleware: "auth",
   data() {
@@ -89,7 +83,7 @@ export default {
   },
   async asyncData({ $axios, redirect }) {
     try {
-      const res = await $axios.$get("/api/fetch-collection-names");
+      const res = await $axios.$get("/api/admin/fetch-collection-names");
       return {
         names: res
       };
@@ -116,14 +110,7 @@ export default {
       this.questions.splice(index, 1);
     },
     handleFileUpload: async function(index) {
-      const reader = new FileReader();
-      reader.readAsDataURL(this.$refs[`image${index}`][0].files[0]);
-      reader.onload = () => {
-        this.questions[index].img = reader.result;
-      };
-      reader.onerror = function(error) {
-        console.log("Error: ", error);
-      };
+      this.questions[index].img = file;
     },
     update: async function() {
       try {

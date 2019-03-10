@@ -6,7 +6,7 @@
           <v-icon>menu</v-icon>
         </v-btn>
       </v-toolbar>
-      <v-navigation-drawer temporary v-if="$device.isMobile" v-model="drawerOn" absolute>
+      <v-navigation-drawer clipped temporary v-if="$device.isMobile" v-model="drawerOn" absolute>
         <v-toolbar flat class="transparent">
           <v-list>
             <v-btn flat block large nuxt to="/admin/new">New</v-btn>

@@ -6,9 +6,9 @@ async function connect() {
   const URI = process.env.MONGO || 'mongodb://localhost:27017';
   const client = await MongoClient.connect(URI, { useNewUrlParser: true });
 	_mainDB = client.db('quizCollections');
-	const configurationDB = await client.db('quiz');
-	_configDB = configurationDB;
-	return configurationDB;
+	const configDBPromise = await client.db('quiz');
+	_configDB = configDBPromise;
+	return configDBPromise;
 }
 
 const configDB = () => _configDB

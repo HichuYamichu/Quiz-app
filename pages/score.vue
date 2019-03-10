@@ -15,8 +15,4 @@ export default {
 </script>
 
 <style scoped>
-.headline {
-  font-size: 4em !important;
-  line-height: 130% !important;
-}
 </style>
